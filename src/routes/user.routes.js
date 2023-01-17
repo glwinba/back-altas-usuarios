@@ -3,11 +3,6 @@ import { changePassword } from "../controllers/user.controller.js";
 
 const router = Router();
 
-router.put('/changePassword', changePassword);
-
-// router.get('/users', getUser);
-
-
-
+router.put('/changePassword/:id', changePassword);
 
 export default router

@@ -1,36 +1,21 @@
-import sql from "mssql";
 import config from "../config.js";
-// const dbSettings = {
-//     user: process.env.DB_NAME_USER,
-//     password: process.env.DB_PASSWORD,
-//     server: process.env.DB_SERVER,
-//     database: process.env.DB_NAME_SCHEMA,
-//     port: process.env.DB_PORT,
-//     options: {
-//         encrypt: true,
-//         trustServerCertificate: true
-//     }
-// }
+import { Sequelize } from "sequelize";
 
-const dbSettings = {
-    user: config.DB_NAME_USER,
-    password: config.DB_PASSWORD,
-    server: config.DB_SERVER,
-    database: config.DB_NAME_SCHEMA,
-    port: parseInt(config.DB_PORT),
-    options: {
-        encrypt: true,
-        trustServerCertificate: true
+const sequelize = new Sequelize(
+    config.DB_NAME_SCHEMA,
+    config.DB_NAME_USER,
+    config.DB_PASSWORD, 
+    {
+        host: config.DB_SERVER,
+        port: config.DB_PORT,
+        dialect: "mssql",
+        timezone: "America/Mexico_City",
+        define: {
+            schema: "dbo",
+            freezeTableName: true // Tablas en singular
+        },
     }
-}
+);
 
-export async function getConnection(){
-    try {
-        const pool = await sql.connect(dbSettings);
-        return pool
-    } catch (e) {
-        console.log(e);
-    }
-}
+export default sequelize
 
-export { sql }
