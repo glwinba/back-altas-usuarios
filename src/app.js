@@ -1,6 +1,8 @@
 import express from 'express';
 import config from './config.js';
 import router from './routes/user.routes.js';
+import './database/relationships.js';
+
 const app = express();
 
 // Settings
