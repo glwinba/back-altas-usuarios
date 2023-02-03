@@ -1,6 +1,7 @@
 import express from 'express';
 import config from './config.js';
-import router from './routes/user.routes.js';
+import routeruser from './routes/user.routes.js';
+import routerempresa from './routes/empresa.routes.js';
 import './database/relationships.js';
 
 const app = express();
@@ -17,6 +18,7 @@ app.set('DB_SERVER', config.DB_SERVER);
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
-app.use(router)
+app.use(routeruser)
+app.use(routerempresa)
 
 export default app
