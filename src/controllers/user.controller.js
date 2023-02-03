@@ -9,6 +9,23 @@ const encryPassword = (password, rounds = 8) => {
     return bcrypt.hashSync(password, rounds);
 }
 
+export const createUser = async (req, res) => {
+    const password_hash = encryPassword(req.body.PASS);
+    User.create({
+        NOMBREUSUARIO: req.body.NOMBREUSUARIO,
+        PASS: password_hash,
+        IDROL: 2074,
+        NOMBRE: req.body.NOMBRE,
+        EMAIL: req.body.EMAIL,
+        HABILITADO: 1
+    }).then( user => {
+        res.json(`Se agrego correctamente el usuario ${user.NOMBREUSUARIO}`);
+    }).catch( e => {
+        console.log(e);
+        res.json('Se produjo un error.');
+    })
+}
+
 export const changePassword = async (req, res) => {
 
     const password_hash = encryPassword(req.body.password);
