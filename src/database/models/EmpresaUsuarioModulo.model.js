@@ -7,6 +7,9 @@ const EmpresaUsuariosModulo = sequelize.define('EmpresaUsuarioModulo', {
     },
     UsuarioNombreUsuario: {
         type: DataTypes.STRING
+    }, 
+    CatalogoModuloId: {
+        type: DataTypes.INTEGER
     }
 });
 

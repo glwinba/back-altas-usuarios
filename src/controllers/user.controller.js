@@ -8,6 +8,11 @@ import OperadorPeriodo from "../database/models/OperadorPeriodo.model.js";
 import EmpresaCategoria from "../database/models/EmpresaCategoria.model.js";
 import CategoriaOperador from "../database/models/CategoriaOperador.model.js";
 import CategoriaOperadorTipoDocumento from "../database/models/CategoriaOperadorTipoDocumento.model.js";
+import EmpresaUsuariosModulo from "../database/models/EmpresaUsuarioModulo.model.js";
+import ModuloTipoUsuario from "../database/models/ModuloTipoUsuario.model.js";
+import UsuariosRoles from "../database/models/UsuariosRoles.model.js";
+import Accesos from "../database/models/Accesos.model.js";
+import prefixempresas from "../arreglos/prefixempresas.js";
 
 // Hash password
 const encryPassword = (password, rounds = 8) => {
@@ -24,18 +29,36 @@ export const createUserProveedor = async (req, res) => {
     // Periodos
     const periodos = [2021, 2022, 2023];
     
+    // Obtener prefijo
+    let prefijo;
+    prefixempresas.forEach(pfEmp => {
+        if (req.body.EmpresaId === pfEmp.UUID) {
+            prefijo = pfEmp.prefix;
+        } 
+    })
+
+    /*
+        Nombre del usuario que es el RFC combiando con el prefijo 
+        Ejemplo:
+        "CCO-ROPC031223H45"
+    */
+    let nameUser = `${prefijo}-${req.body.RFC}`;
+
+    // Creando el usuario.
     User.create({
-        NOMBREUSUARIO: req.body.NOMBREUSUARIO,
+        NOMBREUSUARIO: nameUser,
         PASS: password_hash,
         IDROL: 2074,
         NOMBRE: req.body.NOMBRE,
         EMAIL: req.body.EMAIL,
         HABILITADO: 1
     }).then( user => {
+
+        // Creando el operador.
         Operador.create({
             Uuid: uuid(),
             RazonSocial: req.body.NOMBRE,
-            Rfc: req.body.NOMBREUSUARIO,
+            Rfc: req.body.RFC,
             EmpresaId: req.body.EmpresaId,
             CatalogoOperadorId: 1,
         }).then(operador => {
@@ -53,8 +76,15 @@ export const createUserProveedor = async (req, res) => {
                         where: {
                             EmpresaId: req.body.EmpresaId
                         },
-                        attributes: ['id']
+                        attributes: ['id'],
+                        order: [
+                            ['id', 'ASC']
+                        ],
                     }).then(empCategoria => {
+                        const arrayIdEmpCat = [];
+                        empCategoria.forEach(element => {
+                            arrayIdEmpCat.push(element.dataValues.id);
+                        })
                         empCategoria.forEach(element => {
                             // Llena la tabla de CategoriaOperador.
                             CategoriaOperador.create({
@@ -65,8 +95,7 @@ export const createUserProveedor = async (req, res) => {
                                     const DUE_DILLIGENCE = [14,15,16,17,18,19,20,21,22];
                                     const REGISTRO_CONTROL = [1,2,3,4,5,6,7,8,9,10,11,12,13,80,81,82];
                                     const ENTREGABLES = [23,24,25,26];
-                                    // console.log(catoperador.dataValues);
-                                    if (catoperador.dataValues.EmpresaCategoriumId === 171) {
+                                    if (catoperador.dataValues.EmpresaCategoriumId === arrayIdEmpCat[0]) {
                                             for (let i = 0; i < DUE_DILLIGENCE.length; i++) {
                                                 CategoriaOperadorTipoDocumento.create({
                                                     Uuid: uuid(),
@@ -78,7 +107,7 @@ export const createUserProveedor = async (req, res) => {
 
                                                 })
                                             }
-                                        } else if (catoperador.dataValues.EmpresaCategoriumId === 172) {
+                                        } else if (catoperador.dataValues.EmpresaCategoriumId === arrayIdEmpCat[1]) {
                                             for (let i = 0; i < REGISTRO_CONTROL.length; i++) {
                                                 CategoriaOperadorTipoDocumento.create({
                                                     Uuid: uuid(),
@@ -90,7 +119,7 @@ export const createUserProveedor = async (req, res) => {
 
                                                 })
                                             }
-                                        } else if (catoperador.dataValues.EmpresaCategoriumId === 173) {
+                                        } else if (catoperador.dataValues.EmpresaCategoriumId === arrayIdEmpCat[2]) {
                                             for (let i = 0; i < ENTREGABLES.length; i++) {
                                                 CategoriaOperadorTipoDocumento.create({
                                                     Uuid: uuid(),
@@ -104,11 +133,17 @@ export const createUserProveedor = async (req, res) => {
                                             }
                                         }
                                 }
-                            );
+                            ).catch(e => {
+                                res.json("Error en CategoriaOperador");
+                            })
                         });
                         
+                    }).catch(e => {
+                        res.json("Error en EmpresaCategoria");
                     });
                     
+                }).catch(e => {
+                    res.json("Error en OperadorPeriodo");
                 });
             }
 
@@ -125,15 +160,62 @@ export const createUserProveedor = async (req, res) => {
             }
     
 
-            res.json(`Se agrego correctamente el usuario ${req.body.NOMBREUSUARIO}`);
+            EmpresaUsuariosModulo.create({
+                EmpresaId: req.body.EmpresaId,
+                UsuarioNombreUsuario: nameUser,
+                CatalogoModuloId: 5
+            }).then(empresausemod => {
+                ModuloTipoUsuario.create({
+                    EmpresaUsuarioModuloId: empresausemod.dataValues.id,
+                    CatalogoTipoUsuarioId: 2
+                }).then(modtipouser => {
+                    res.json(`Se agrego correctamente el usuario ${req.body.NOMBRE}`);
+                    UsuarioOperador.create({
+                        EmpresaId: req.body.EmpresaId,
+                        Rfc: req.body.RFC,
+                        ModuloTipoUsuarioId: modtipouser.dataValues.id
+                    }).then(useroper => {
+                        UsuariosRoles.create({
+                            Activo: 1,
+                            Especial: "none",
+                            UsuarioNombreUsuario: nameUser,
+                            RoleId: 2
+                        }).then(useroles => {
+
+                            const idPermission = [1,2,3,5];
+                            
+                            for (let i = 0; i < idPermission.length; i++) {
+                                Accesos.create({
+                                    UsuariosRoleId: useroles.dataValues.id,
+                                    PermisoId: idPermission[i],
+                                    Activo: 1
+                                }).then(access => {
+
+                                }).catch(e => {
+                                    res.json("Se produjo un error en Accesos.")
+                                })
+                            }
+                            
+                        }).catch(e => {
+                            res.json("Se produjo un error en UsuariosRoles.")
+                        })
+                    }).catch(e => {
+                        res.json("Se produjo un error en UsuarioOperador.")
+                    })
+                }).catch(e => {
+                    res.json("Se produjo un error en ModuloTipoUsuario.")
+                })
+            }).catch(e => {
+                console.log(e);
+                res.json("Se produjo un error en EmpresaUsuariosModulo.")
+            })
         })
         .catch( e => {
-            console.log(e);
-            res.json('Se produjo un error Operador.');
+            res.json('Se produjo un error en Operador.');
         })
     }).catch( e => {
         console.log(e);
-        res.json('Se produjo un error Usuario.');
+        res.json("Se produjo un error en Usuario.");
     })
 }
 

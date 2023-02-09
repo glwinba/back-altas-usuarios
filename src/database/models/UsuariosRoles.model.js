@@ -1,16 +1,19 @@
 import { DataTypes } from "sequelize";
 import { sequelizeBMServEsp as sequelize } from "../connection.js";
 
-const UsuarioOperador = sequelize.define("UsuarioOperador", {
-    EmpresaId: {
+const UsuariosRoles = sequelize.define("UsuariosRoles", {
+    Activo: {
         type: DataTypes.INTEGER
     },
-    Rfc: {
+    Especial: {
         type: DataTypes.STRING
-    }, 
-    ModuloTipoUsuarioId: {
+    },
+    UsuarioNombreUsuario: {
+        type: DataTypes.STRING
+    },
+    RoleId: {
         type: DataTypes.INTEGER
     }
 });
 
-export default UsuarioOperador
+export default UsuariosRoles
