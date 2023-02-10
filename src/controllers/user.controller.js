@@ -13,6 +13,7 @@ import ModuloTipoUsuario from "../database/models/ModuloTipoUsuario.model.js";
 import UsuariosRoles from "../database/models/UsuariosRoles.model.js";
 import Accesos from "../database/models/Accesos.model.js";
 import prefixempresas from "../arreglos/prefixempresas.js";
+import sendMailProveedor from "../mails/proveedor/controldeempresa.js";
 
 // Hash password
 const encryPassword = (password, rounds = 8) => {
@@ -216,6 +217,10 @@ export const createUserProveedor = async (req, res) => {
     }).catch( e => {
         console.log(e);
         res.json("Se produjo un error en Usuario.");
+    })
+
+    sendMailProveedor().then(correo => {
+        console.log("Correo enviado");
     })
 }
 
