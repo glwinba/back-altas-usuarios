@@ -1,19 +1,23 @@
 const prefijoEmpresa = [
     {
         UUID: 439,
-        prefix: "CCO"
+        prefix: "CCO",
+        abreviacion: "CCOXXO"
     },
     {
         UUID: 442,
-        prefix: "OG"
+        prefix: "OG",
+        abreviacion: "OXXOGAS"
     },
     {
         UUID: 869,
-        prefix: "IMMEX"
+        prefix: "IMMEX",
+        abreviacion: "IMMEX"
     },
     {
         UUID: 879,
-        prefix: "XP"
+        prefix: "XP",
+        abreviacion: "XPERTAL"
     }
 ]
 

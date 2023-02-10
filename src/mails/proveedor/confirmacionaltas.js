@@ -25,7 +25,7 @@ const sendMailProveedor = ({
         let mailOptions = {
             from: 'crodriguez@glwinba.com',
             to: correo,
-            subject: `${abreviacion} / CONTROL DE EMPRESAS DE SERVICIOS ESPECIALIZADOS`,
+            subject: `${abreviacion} / CONFIRMACIÓN ALTA PROVEEDOR`,
             html: htmlToSend
 
         };

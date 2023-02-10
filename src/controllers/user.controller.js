@@ -32,9 +32,11 @@ export const createUserProveedor = async (req, res) => {
     
     // Obtener prefijo
     let prefijo;
+    let abreviacion;
     prefixempresas.forEach(pfEmp => {
         if (req.body.EmpresaId === pfEmp.UUID) {
             prefijo = pfEmp.prefix;
+            abreviacion = pfEmp.abreviacion;
         } 
     })
 
@@ -219,7 +221,14 @@ export const createUserProveedor = async (req, res) => {
         res.json("Se produjo un error en Usuario.");
     })
 
-    sendMailProveedor().then(correo => {
+    // Envio de Correo a proveedor.
+    sendMailProveedor({
+        razon_social: req.body.NOMBRE,
+        correo: req.body.EMAIL,
+        usuario: nameUser,
+        clave: req.body.PASS,
+        abreviacion: abreviacion
+    }).then(correo => {
         console.log("Correo enviado");
     })
 }
