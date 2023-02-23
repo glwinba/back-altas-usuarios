@@ -2,8 +2,12 @@ import express from 'express';
 import config from './config.js';
 import routeruser from './routes/user.routes.js';
 import routerempresa from './routes/empresa.routes.js';
+import routergrupos from './routes/grupos.routes.js';
 import './database/relationships.js';
 import cors from 'cors';
+import fileUpload from 'express-fileupload';
+
+
 const app = express();
 
 // Settings
@@ -14,13 +18,17 @@ app.set('DB_PORT', config.DB_PORT);
 app.set('DB_NAME_SCHEMA', config.DB_NAME_SCHEMA);
 app.set('DB_SERVER', config.DB_SERVER);
 
-app.use(cors());
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+app.use(fileUpload({
+    createParentPath: true
+}));
 
-app.use(routeruser)
-app.use(routerempresa)
+app.use(routeruser);
+app.use(routerempresa);
+app.use(routergrupos);
 
 export default app

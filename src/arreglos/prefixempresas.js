@@ -15,9 +15,24 @@ const prefijoEmpresa = [
         abreviacion: "IMMEX"
     },
     {
-        UUID: 879,
+        UUID: 871,
         prefix: "XP",
         abreviacion: "XPERTAL"
+    }, 
+    {
+        UUID: 881,
+        prefix: "FS",
+        abreviacion: "FEMSA SERVICIOS"
+    },
+    {
+        UUID: 909,
+        prefix: "EX",
+        abreviacion: "EMPREX SERVICIOS"
+    },
+    {
+        UUID: 905,
+        prefix: "ABC",
+        abreviacion: "ABC TECH"
     }
 ]
 

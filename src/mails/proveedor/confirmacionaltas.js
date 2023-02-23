@@ -2,7 +2,7 @@ import transporter from "../config.js";
 import fs from "fs";
 import handlebars from "handlebars";
 
-const sendMailProveedor = ({
+const sendMailProveedorConfirmacion = ({
     razon_social,
     correo, 
     usuario,
@@ -10,7 +10,7 @@ const sendMailProveedor = ({
     abreviacion
 }) =>
     new Promise((resolve, reject) => {
-        const htmlFile = `${__dirname}/layout_email.html`;
+        const htmlFile = `${__dirname}/layout_confirmacion.html`;
         const htmlSync = fs.readFileSync(htmlFile, { encoding: "utf-8" });
         const template = handlebars.compile(htmlSync);
         const replacements = {
@@ -38,4 +38,4 @@ const sendMailProveedor = ({
     });
 
 
-export default sendMailProveedor
+export default sendMailProveedorConfirmacion
