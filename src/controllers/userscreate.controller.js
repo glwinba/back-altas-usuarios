@@ -15,6 +15,7 @@ import Accesos from "../database/models/Accesos.model.js";
 import prefixempresas from "../arreglos/prefixempresas.js";
 import sendMailProveedor from "../mails/proveedor/controldeempresa.js";
 import mimeTypes from "mime-types";
+import fs from "fs";
 
 const encryPassword = (password, rounds = 8) => {
   return bcrypt.hashSync(password, rounds);
@@ -52,10 +53,21 @@ const uploadFile = async (myFile) => {
   return path;
 };
 
+const deleteFileLaterUpload = (filePath) => {
+  fs.access(filePath, (error) => {
+    if (!error) {
+      fs.unlinkSync(filePath);
+      console.log("Archivo eliminado")
+    } else {
+      console.error("Error al eliminar archivo: ", error);
+    }
+  });
+};
+
 export const readExcel = async (req, res) => {
   let path = await uploadFile(req.files.file);
 
-  setTimeout(() => {
+  setTimeout(async () => {
     const file = reader.readFile(path);
 
     let data = [];
@@ -74,6 +86,7 @@ export const readExcel = async (req, res) => {
     }
 
     res.json(data);
+    deleteFileLaterUpload(path);
   }, 5000);
 };
 
@@ -441,7 +454,6 @@ export const addEmpresUser = async (req, res) => {
               CatalogoTipoUsuarioId: 2,
             })
               .then((modtipouser) => {
-                
                 UsuarioOperador.create({
                   EmpresaId: user_empresa.id,
                   Rfc: rfc,
