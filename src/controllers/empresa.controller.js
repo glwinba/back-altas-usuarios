@@ -14,3 +14,14 @@ export const allEmpresas = (req, res) => {
         ]
     }).then(data => res.json(data));
 }
+
+export const createEmpresa = (req, res) => {
+    Empresa.create({
+        uuid: uuid(),   
+        rfc: req.body.rfc,
+        nombre: req.body.nombre,
+        habilitado: req.body.habilitado,
+        activo: req.body.activo,
+        GrupoId: req.body.GrupoId
+    }).then(empresa => res.json("Empresa creada correctamente."))
+}

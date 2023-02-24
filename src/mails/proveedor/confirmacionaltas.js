@@ -3,39 +3,37 @@ import fs from "fs";
 import handlebars from "handlebars";
 
 const sendMailProveedorConfirmacion = ({
-    razon_social,
-    correo, 
-    usuario,
-    clave,
-    abreviacion
+    correo,
+    nombre,
+    razon_social_contratante,
+    correo_contratante,
+    abreviacion,
 }) =>
-    new Promise((resolve, reject) => {
-        const htmlFile = `${__dirname}/layout_confirmacion.html`;
-        const htmlSync = fs.readFileSync(htmlFile, { encoding: "utf-8" });
-        const template = handlebars.compile(htmlSync);
-        const replacements = {
-            razon_social,
-            correo, 
-            usuario,
-            clave,
-            abreviacion
-        };
-        const htmlToSend = template(replacements);
+  new Promise((resolve, reject) => {
+    const htmlFile = `${__dirname}/layout_confirmacion.html`;
+    const htmlSync = fs.readFileSync(htmlFile, { encoding: "utf-8" });
+    const template = handlebars.compile(htmlSync);
+    const replacements = {
+      correo,
+      nombre,
+      razon_social_contratante,
+      correo_contratante,
+      abreviacion,
+    };
+    const htmlToSend = template(replacements);
 
-        let mailOptions = {
-            from: 'crodriguez@glwinba.com',
-            to: correo,
-            subject: `${abreviacion} / CONFIRMACIÓN ALTA PROVEEDOR`,
-            html: htmlToSend
+    let mailOptions = {
+      from: "crodriguez@glwinba.com",
+      to: correo_contratante,
+      subject: `${abreviacion} / CONFIRMACIÓN ALTA PROVEEDOR`,
+      html: htmlToSend,
+    };
 
-        };
-
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                reject(error);
-            } else resolve(info);
-        });
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        reject(error);
+      } else resolve(info);
     });
+  });
 
-
-export default sendMailProveedorConfirmacion
+export default sendMailProveedorConfirmacion;

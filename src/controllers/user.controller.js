@@ -15,6 +15,7 @@ import UsuariosRoles from "../database/models/UsuariosRoles.model.js";
 import Accesos from "../database/models/Accesos.model.js";
 import prefixempresas from "../arreglos/prefixempresas.js";
 import sendMailProveedor from "../mails/proveedor/controldeempresa.js";
+import sendMailProveedorConfirmacion from "../mails/proveedor/confirmacionaltas.js";
 
 // Hash password
 const encryPassword = (password, rounds = 8) => {
@@ -248,15 +249,34 @@ export const createUserProveedor = async (req, res) => {
   }).then((correo) => {
     console.log("Correo enviado");
   });
+
+  Empresa.findByPk(req.body.EmpresaId).then((empresa) => {
+    if (req.body.correocontratante1) {
+      sendMailProveedorConfirmacion({
+        correo: req.body.EMAIL,
+        nombre: req.body.NOMBRE,
+        razon_social_contratante: empresa.nombre,
+        correo_contratante: req.body.correocontratante1,
+        abreviacion: abreviacion,
+      }).then(console.log("Envio confirmacion alta 1."));
+    } 
+    if (req.body.correocontratante2) {
+      sendMailProveedorConfirmacion({
+        correo: req.body.EMAIL,
+        nombre: req.body.NOMBRE,
+        razon_social_contratante: empresa.nombre,
+        correo_contratante: req.body.correocontratante2,
+        abreviacion: abreviacion,
+      }).then(console.log("Envio confirmacion alta 2."));
+    }
+  });
 };
 
 export const getUsers = async (req, res) => {
   const type_users = ["admin", "cliente", "proveedor"];
   User.findAll({
     attributes: ["UUID", "NOMBREUSUARIO", "NOMBRE", "EMAIL"],
-    order: [
-        ['UUID', 'DESC']
-    ],
+    order: [["UUID", "DESC"]],
   }).then((usuario) => {
     res.json(usuario);
   });
@@ -267,21 +287,19 @@ export const getUserEmpresas = async (req, res) => {
 
   EmpresaUsuariosModulo.findAll({
     where: {
-      UsuarioNombreUsuario: user.NOMBREUSUARIO
-    }, 
-    include: [Empresa]
-  }).then(result => {
+      UsuarioNombreUsuario: user.NOMBREUSUARIO,
+    },
+    include: [Empresa],
+  }).then((result) => {
     res.json(result);
-  })
-}
+  });
+};
 
 export const getUser = async (req, res) => {
-  User.findByPk(req.params.id).then(result => {
-    res.json(result)
-  })
-}
-
-
+  User.findByPk(req.params.id).then((result) => {
+    res.json(result);
+  });
+};
 
 export const changePassword = async (req, res) => {
   const password_hash = encryPassword(req.body.password);
@@ -339,14 +357,16 @@ export const updateRFCInternal = async (req, res) => {
 };
 
 export const updateEmail = async (req, res) => {
-  User.update({
-    EMAIL: req.body.EMAIL,
-  },
-  {
-    where: {
-      UUID: req.params.id,
+  User.update(
+    {
+      EMAIL: req.body.EMAIL,
     },
-  }).then(user => {
-    res.json("Correo electronico actualizado.")
-  })
-}
+    {
+      where: {
+        UUID: req.params.id,
+      },
+    }
+  ).then((user) => {
+    res.json("Correo electronico actualizado.");
+  });
+};
