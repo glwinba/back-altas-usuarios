@@ -17,6 +17,12 @@ const Empresa = sequelize.define('Empresa', {
     activo: {
         type: DataTypes.INTEGER
     },
+    ciec: {
+        type: DataTypes.STRING
+    },
+    comentarios: {
+        type: DataTypes.TEXT
+    },
     GrupoId: {
         type: DataTypes.INTEGER
     }
