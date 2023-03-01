@@ -1,6 +1,7 @@
 import { Router } from "express";
+import { findPeriodos2023 } from "../controllers/prueba.controller.js";
 import { changePassword, createUserProveedor, getUser, getUserEmpresas, getUsers, updateEmail, updateRFCInternal } from "../controllers/user.controller.js";
-import { addEmpresUser, createUserProveedorMasive, readExcel } from "../controllers/userscreate.controller.js";
+import { addEmpresUser, createUserAdmin, createUserCliente, createUserProveedorMasive, readExcel } from "../controllers/userscreate.controller.js";
 
 const router = Router();
 
@@ -14,7 +15,9 @@ router.get('/getUser/:id', getUser);
 router.post('/readExcel', readExcel);
 router.get('/getuserempresa/:id', getUserEmpresas);
 router.post('/addEmpresUser', addEmpresUser);
-
+router.post('/createUserAdmin', createUserAdmin);
+router.post('/createUserCliente', createUserCliente);
+router.get('/findPeriodos2023', findPeriodos2023);
 
 
 

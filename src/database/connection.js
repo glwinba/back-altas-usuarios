@@ -54,7 +54,24 @@ const sequelizeGeneral = new Sequelize(
     }
 );
 
+const sequelizeBMServEspClientes = new Sequelize(
+    config.DB_NAME_SCHEMA,
+    config.DB_NAME_USER,
+    config.DB_PASSWORD, 
+    {
+        host: config.DB_SERVER,
+        port: config.DB_PORT,
+        dialect: "mssql",
+        timezone: "America/Mexico_City",
+        define: {
+            schema: "BM_SERV_ESP_CLIENTES", // Esquema de la base de datos.
+            freezeTableName: true // Tablas en singular
+        },
+        logging: false
+    }
+);
+
 module.exports = {
-    sequelize, sequelizeBMServEsp, sequelizeGeneral
+    sequelize, sequelizeBMServEsp, sequelizeGeneral, sequelizeBMServEspClientes
 }
 

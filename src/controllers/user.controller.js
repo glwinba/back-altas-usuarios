@@ -183,9 +183,7 @@ export const createUserProveedor = async (req, res) => {
                 CatalogoTipoUsuarioId: 2,
               })
                 .then((modtipouser) => {
-                  res.json(
-                    `Se agrego correctamente el usuario ${req.body.NOMBRE}`
-                  );
+                  res.json(empresausemod.dataValues);
                   UsuarioOperador.create({
                     EmpresaId: req.body.EmpresaId,
                     Rfc: req.body.RFC,
