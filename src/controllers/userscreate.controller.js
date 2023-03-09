@@ -87,7 +87,7 @@ export const readExcel = async (req, res) => {
       if (sheets[i] === "PROVEEDOR") {
         const temp = reader.utils.sheet_to_json(
           file.Sheets[file.SheetNames[i]]
-        );
+        );  
 
         temp.forEach((respuesta) => {
           data.push(respuesta);

@@ -38,6 +38,11 @@ const prefijoEmpresa = [
         UUID: 898,
         prefix: "DVCM",
         abreviacion: "DVCM"
+    },
+    {
+        UUID: 868,
+        prefix: "FAR",
+        abreviacion: "FARMACON"
     }
 ]
 

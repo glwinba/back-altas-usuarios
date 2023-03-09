@@ -2,6 +2,7 @@ import Empresa from "../database/models/Empresa.model";
 import { uuid } from "uuidv4";
 import EmpresaCategoria from "../database/models/EmpresaCategoria.model";
 import Grupo from "../database/models/Grupo.model";
+import EmpresaCategoriaCliente from "../database/models/EmpresaCategoriaCliente.model";
 
 export const allEmpresaSelect = async (req, res) => {
   Empresa.findAll({
@@ -14,10 +15,11 @@ export const allEmpresas = async (req, res) => {
     attributes: ["id", "rfc", "nombre", "GrupoId"],
     order: [["id", "DESC"]],
     include: [
-        {
-            model: Grupo,
-            attributes: ["nombre"],
-        }]
+      {
+        model: Grupo,
+        attributes: ["nombre"],
+      },
+    ],
   }).then((data) => res.json(data));
 };
 
@@ -81,8 +83,14 @@ export const createCompanyComplete = async (req, res) => {
         EmpresaId: empresa.dataValues.id,
         CategoriaMaterialidadId: catmat,
       });
+      EmpresaCategoriaCliente.create({
+        Uuid: uuid(),
+        HabilitadoCategoriaMaterialidad: 1,
+        EmpresaId: empresa.dataValues.id,
+        CategoriaMaterialidadId: catmat,
+      });
     }
   });
 
-  res.json("Empresa creada correctamente")
+  res.json("Empresa creada correctamente");
 };
