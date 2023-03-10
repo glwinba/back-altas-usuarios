@@ -71,6 +71,7 @@ const sequelizeBMServEspClientes = new Sequelize(
     }
 );
 
+
 module.exports = {
     sequelize, sequelizeBMServEsp, sequelizeGeneral, sequelizeBMServEspClientes
 }

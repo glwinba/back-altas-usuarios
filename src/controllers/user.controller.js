@@ -102,7 +102,11 @@ export const createUserProveedor = async (req, res) => {
                           ];
                           const REGISTRO_CONTROL = [
                             1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 80, 81,
-                            82,
+                            82
+                          ];
+                          const REGISTRO_CONTROL2 = [
+                            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 80, 81,
+                            82, 90
                           ];
                           const ENTREGABLES = [23, 24, 25, 26];
                           if (
@@ -122,14 +126,53 @@ export const createUserProveedor = async (req, res) => {
                             catoperador.dataValues.EmpresaCategoriumId ===
                             arrayIdEmpCat[1]
                           ) {
-                            for (let i = 0; i < REGISTRO_CONTROL.length; i++) {
-                              CategoriaOperadorTipoDocumento.create({
-                                Uuid: uuid(),
-                                RequireValidacion: 0,
-                                HabilitadoDocumento: 1,
-                                CategoriaOperadorId: catoperador.dataValues.id,
-                                CatalogoTipoDocumentoId: REGISTRO_CONTROL[i],
-                              }).then((catopDoc) => {});
+                            if (opper.dataValues.Ano === 2023) {
+                              for (
+                                let i = 0;
+                                i < REGISTRO_CONTROL2.length;
+                                i++
+                              ) {
+                                CategoriaOperadorTipoDocumento.create({
+                                  Uuid: uuid(),
+                                  RequireValidacion: 0,
+                                  HabilitadoDocumento: 1,
+                                  CategoriaOperadorId:
+                                    catoperador.dataValues.id,
+                                  CatalogoTipoDocumentoId: REGISTRO_CONTROL2[i],
+                                }).then((catopDoc) => {});
+                              }
+                            } else if (
+                              opper.dataValues.Ano === 2022 && opper.dataValues.Mes === 12
+                            ) {
+                              for (
+                                let i = 0;
+                                i < REGISTRO_CONTROL2.length;
+                                i++
+                              ) {
+                                CategoriaOperadorTipoDocumento.create({
+                                  Uuid: uuid(),
+                                  RequireValidacion: 0,
+                                  HabilitadoDocumento: 1,
+                                  CategoriaOperadorId:
+                                    catoperador.dataValues.id,
+                                  CatalogoTipoDocumentoId: REGISTRO_CONTROL2[i],
+                                }).then((catopDoc) => {});
+                              }
+                            } else {
+                              for (
+                                let i = 0;
+                                i < REGISTRO_CONTROL.length;
+                                i++
+                              ) {
+                                CategoriaOperadorTipoDocumento.create({
+                                  Uuid: uuid(),
+                                  RequireValidacion: 0,
+                                  HabilitadoDocumento: 1,
+                                  CategoriaOperadorId:
+                                    catoperador.dataValues.id,
+                                  CatalogoTipoDocumentoId: REGISTRO_CONTROL[i],
+                                }).then((catopDoc) => {});
+                              }
                             }
                           } else if (
                             catoperador.dataValues.EmpresaCategoriumId ===
@@ -229,6 +272,7 @@ export const createUserProveedor = async (req, res) => {
             });
         })
         .catch((e) => {
+          console.log(e);
           res.json("Se produjo un error en Operador.");
         });
     })
@@ -257,7 +301,7 @@ export const createUserProveedor = async (req, res) => {
         correo_contratante: req.body.correocontratante1,
         abreviacion: abreviacion,
       }).then(console.log("Envio confirmacion alta 1."));
-    } 
+    }
     if (req.body.correocontratante2) {
       sendMailProveedorConfirmacion({
         correo: req.body.EMAIL,

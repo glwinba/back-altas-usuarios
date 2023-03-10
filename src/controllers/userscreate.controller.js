@@ -87,7 +87,7 @@ export const readExcel = async (req, res) => {
       if (sheets[i] === "PROVEEDOR") {
         const temp = reader.utils.sheet_to_json(
           file.Sheets[file.SheetNames[i]]
-        );  
+        );
 
         temp.forEach((respuesta) => {
           data.push(respuesta);
@@ -182,6 +182,10 @@ export const createUserProveedorMasive = async (req, res) => {
                               1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 80, 81,
                               82,
                             ];
+                            const REGISTRO_CONTROL2 = [
+                              1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 80, 81,
+                              82, 90,
+                            ];
                             const ENTREGABLES = [23, 24, 25, 26];
                             if (
                               catoperador.dataValues.EmpresaCategoriumId ===
@@ -201,19 +205,57 @@ export const createUserProveedorMasive = async (req, res) => {
                               catoperador.dataValues.EmpresaCategoriumId ===
                               arrayIdEmpCat[1]
                             ) {
-                              for (
-                                let i = 0;
-                                i < REGISTRO_CONTROL.length;
-                                i++
+                              if (opper.dataValues.Ano === 2023) {
+                                for (
+                                  let i = 0;
+                                  i < REGISTRO_CONTROL2.length;
+                                  i++
+                                ) {
+                                  CategoriaOperadorTipoDocumento.create({
+                                    Uuid: uuid(),
+                                    RequireValidacion: 0,
+                                    HabilitadoDocumento: 1,
+                                    CategoriaOperadorId:
+                                      catoperador.dataValues.id,
+                                    CatalogoTipoDocumentoId:
+                                      REGISTRO_CONTROL2[i],
+                                  }).then((catopDoc) => {});
+                                }
+                              } else if (
+                                opper.dataValues.Ano === 2022 &&
+                                opper.dataValues.Mes === 12
                               ) {
-                                CategoriaOperadorTipoDocumento.create({
-                                  Uuid: uuid(),
-                                  RequireValidacion: 0,
-                                  HabilitadoDocumento: 1,
-                                  CategoriaOperadorId:
-                                    catoperador.dataValues.id,
-                                  CatalogoTipoDocumentoId: REGISTRO_CONTROL[i],
-                                }).then((catopDoc) => {});
+                                for (
+                                  let i = 0;
+                                  i < REGISTRO_CONTROL2.length;
+                                  i++
+                                ) {
+                                  CategoriaOperadorTipoDocumento.create({
+                                    Uuid: uuid(),
+                                    RequireValidacion: 0,
+                                    HabilitadoDocumento: 1,
+                                    CategoriaOperadorId:
+                                      catoperador.dataValues.id,
+                                    CatalogoTipoDocumentoId:
+                                      REGISTRO_CONTROL2[i],
+                                  }).then((catopDoc) => {});
+                                }
+                              } else {
+                                for (
+                                  let i = 0;
+                                  i < REGISTRO_CONTROL.length;
+                                  i++
+                                ) {
+                                  CategoriaOperadorTipoDocumento.create({
+                                    Uuid: uuid(),
+                                    RequireValidacion: 0,
+                                    HabilitadoDocumento: 1,
+                                    CategoriaOperadorId:
+                                      catoperador.dataValues.id,
+                                    CatalogoTipoDocumentoId:
+                                      REGISTRO_CONTROL[i],
+                                  }).then((catopDoc) => {});
+                                }
                               }
                             } else if (
                               catoperador.dataValues.EmpresaCategoriumId ===
@@ -383,6 +425,10 @@ export const addEmpresUser = async (req, res) => {
                         const REGISTRO_CONTROL = [
                           1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 80, 81, 82,
                         ];
+                        const REGISTRO_CONTROL2 = [
+                          1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 80, 81, 82,
+                          90,
+                        ];
                         const ENTREGABLES = [23, 24, 25, 26];
                         if (
                           catoperador.dataValues.EmpresaCategoriumId ===
@@ -401,14 +447,39 @@ export const addEmpresUser = async (req, res) => {
                           catoperador.dataValues.EmpresaCategoriumId ===
                           arrayIdEmpCat[1]
                         ) {
-                          for (let i = 0; i < REGISTRO_CONTROL.length; i++) {
-                            CategoriaOperadorTipoDocumento.create({
-                              Uuid: uuid(),
-                              RequireValidacion: 0,
-                              HabilitadoDocumento: 1,
-                              CategoriaOperadorId: catoperador.dataValues.id,
-                              CatalogoTipoDocumentoId: REGISTRO_CONTROL[i],
-                            }).then((catopDoc) => {});
+                          if (opper.dataValues.Ano === 2023) {
+                            for (let i = 0; i < REGISTRO_CONTROL2.length; i++) {
+                              CategoriaOperadorTipoDocumento.create({
+                                Uuid: uuid(),
+                                RequireValidacion: 0,
+                                HabilitadoDocumento: 1,
+                                CategoriaOperadorId: catoperador.dataValues.id,
+                                CatalogoTipoDocumentoId: REGISTRO_CONTROL2[i],
+                              }).then((catopDoc) => {});
+                            }
+                          } else if (
+                            opper.dataValues.Ano === 2022 &&
+                            opper.dataValues.Mes === 12
+                          ) {
+                            for (let i = 0; i < REGISTRO_CONTROL2.length; i++) {
+                              CategoriaOperadorTipoDocumento.create({
+                                Uuid: uuid(),
+                                RequireValidacion: 0,
+                                HabilitadoDocumento: 1,
+                                CategoriaOperadorId: catoperador.dataValues.id,
+                                CatalogoTipoDocumentoId: REGISTRO_CONTROL2[i],
+                              }).then((catopDoc) => {});
+                            }
+                          } else {
+                            for (let i = 0; i < REGISTRO_CONTROL.length; i++) {
+                              CategoriaOperadorTipoDocumento.create({
+                                Uuid: uuid(),
+                                RequireValidacion: 0,
+                                HabilitadoDocumento: 1,
+                                CategoriaOperadorId: catoperador.dataValues.id,
+                                CatalogoTipoDocumentoId: REGISTRO_CONTROL[i],
+                              }).then((catopDoc) => {});
+                            }
                           }
                         } else if (
                           catoperador.dataValues.EmpresaCategoriumId ===
@@ -655,6 +726,10 @@ export const createUserCliente = async (req, res) => {
                             1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 80, 81,
                             82,
                           ];
+                          const REGISTRO_CONTROL2 = [
+                            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 80, 81,
+                            82, 90,
+                          ];
                           const ENTREGABLES = [23, 24, 25, 26];
                           if (
                             catoperador.dataValues.EmpresaCategoriumId ===
@@ -673,14 +748,54 @@ export const createUserCliente = async (req, res) => {
                             catoperador.dataValues.EmpresaCategoriumId ===
                             arrayIdEmpCat[1]
                           ) {
-                            for (let i = 0; i < REGISTRO_CONTROL.length; i++) {
-                              CategoriaOperadorTipoDocumentoCliente.create({
-                                Uuid: uuid(),
-                                RequireValidacion: 0,
-                                HabilitadoDocumento: 1,
-                                CategoriaOperadorId: catoperador.dataValues.id,
-                                CatalogoTipoDocumentoId: REGISTRO_CONTROL[i],
-                              }).then((catopDoc) => {});
+                            if (opper.dataValues.Ano === 2023) {
+                              for (
+                                let i = 0;
+                                i < REGISTRO_CONTROL2.length;
+                                i++
+                              ) {
+                                CategoriaOperadorTipoDocumentoCliente.create({
+                                  Uuid: uuid(),
+                                  RequireValidacion: 0,
+                                  HabilitadoDocumento: 1,
+                                  CategoriaOperadorId:
+                                    catoperador.dataValues.id,
+                                  CatalogoTipoDocumentoId: REGISTRO_CONTROL2[i],
+                                }).then((catopDoc) => {});
+                              }
+                            } else if (
+                              opper.dataValues.Ano === 2022 &&
+                              opper.dataValues.Mes === 12
+                            ) {
+                              for (
+                                let i = 0;
+                                i < REGISTRO_CONTROL2.length;
+                                i++
+                              ) {
+                                CategoriaOperadorTipoDocumentoCliente.create({
+                                  Uuid: uuid(),
+                                  RequireValidacion: 0,
+                                  HabilitadoDocumento: 1,
+                                  CategoriaOperadorId:
+                                    catoperador.dataValues.id,
+                                  CatalogoTipoDocumentoId: REGISTRO_CONTROL2[i],
+                                }).then((catopDoc) => {});
+                              }
+                            } else {
+                              for (
+                                let i = 0;
+                                i < REGISTRO_CONTROL.length;
+                                i++
+                              ) {
+                                CategoriaOperadorTipoDocumentoCliente.create({
+                                  Uuid: uuid(),
+                                  RequireValidacion: 0,
+                                  HabilitadoDocumento: 1,
+                                  CategoriaOperadorId:
+                                    catoperador.dataValues.id,
+                                  CatalogoTipoDocumentoId: REGISTRO_CONTROL[i],
+                                }).then((catopDoc) => {});
+                              }
                             }
                           } else if (
                             catoperador.dataValues.EmpresaCategoriumId ===
@@ -787,4 +902,4 @@ export const createUserCliente = async (req, res) => {
       console.log(e);
       res.json("Se produjo un error en Usuario.");
     });
-}
+};

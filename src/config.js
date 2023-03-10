@@ -7,5 +7,6 @@ export default {
     DB_PASSWORD: process.env.DB_PASSWORD,
     DB_PORT: process.env.DB_PORT,
     DB_NAME_SCHEMA: process.env.DB_NAME_SCHEMA,
-    DB_SERVER: process.env.DB_SERVER
+    DB_SERVER: process.env.DB_SERVER,
+    SECRET: 'serv-esp-api'
 }
