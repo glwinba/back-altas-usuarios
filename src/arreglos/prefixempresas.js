@@ -2,47 +2,47 @@ const prefijoEmpresa = [
     {
         UUID: 439,
         prefix: "CCO",
-        abreviacion: "CCOXXO"
+        abbreviation: "CCOXXO"
     },
     {
         UUID: 442,
         prefix: "OG",
-        abreviacion: "OXXOGAS"
+        abbreviation: "OXXOGAS"
     },
     {
         UUID: 869,
         prefix: "IMMEX",
-        abreviacion: "IMMEX"
+        abbreviation: "IMMEX"
     },
     {
         UUID: 871,
         prefix: "XP",
-        abreviacion: "XPERTAL"
+        abbreviation: "XPERTAL"
     }, 
     {
         UUID: 881,
         prefix: "FS",
-        abreviacion: "FEMSA SERVICIOS"
+        abbreviation: "FEMSA SERVICIOS"
     },
     {
         UUID: 909,
         prefix: "EX",
-        abreviacion: "EMPREX SERVICIOS"
+        abbreviation: "EMPREX SERVICIOS"
     },
     {
         UUID: 905,
         prefix: "ABC",
-        abreviacion: "ABC TECH"
+        abbreviation: "ABC TECH"
     },
     {
         UUID: 898,
         prefix: "DVCM",
-        abreviacion: "DVCM"
+        abbreviation: "DVCM"
     },
     {
         UUID: 868,
         prefix: "FAR",
-        abreviacion: "FARMACON"
+        abbreviation: "FARMACON"
     }
 ]
 

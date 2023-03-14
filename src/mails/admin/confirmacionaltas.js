@@ -1,6 +1,7 @@
 import transporter from "../config.js";
 import fs from "fs";
 import handlebars from "handlebars";
+import config from "../../config.js";
 
 const sendMailAdministradorConfirmacion = ({
     correo,
@@ -23,7 +24,7 @@ const sendMailAdministradorConfirmacion = ({
     const htmlToSend = template(replacements);
 
     let mailOptions = {
-      from: "crodriguez@glwinba.com",
+      from: config.MAIL_USER,
       to: correo,
       subject: `${abreviacion} / CONTROL DE EMPRESAS DE SERVICIOS ESPECIALIZADOS`,
       html: htmlToSend,

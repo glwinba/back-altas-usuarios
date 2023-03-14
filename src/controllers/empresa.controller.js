@@ -59,37 +59,39 @@ export const createCompanyComplete = async (req, res) => {
     uuid: uuid(),
     rfc: req.body.rfc,
     nombre: req.body.nombre,
-    ciec: req.body.ciec,
+    ciec: req.body.ciec ? req.body.ciec : null,
     habilitado: 1,
     activo: 1,
     GrupoId: req.body.GrupoId,
-    comentarios: req.body.comentarios,
+    comentarios: req.body.comentarios ? req.body.comentarios : null,
   }).then((empresa) => {
     Empresa.create({
       uuid: uuid(),
       rfc: req.body.rfc,
       nombre: `${req.body.nombre} BAJA`,
-      ciec: req.body.ciec,
+      ciec: req.body.ciec ? req.body.ciec : null,
       habilitado: 1,
       activo: 1,
       GrupoId: req.body.GrupoId,
       comentarios: "Empresa para Baja",
     }).then();
+    // if (req.body.CategoriaMaterialidadId){
 
-    for (const catmat of CategoriaMaterialidadId) {
-      EmpresaCategoria.create({
-        Uuid: uuid(),
-        HabilitadoCategoriaMaterialidad: 1,
-        EmpresaId: empresa.dataValues.id,
-        CategoriaMaterialidadId: catmat,
-      });
-      EmpresaCategoriaCliente.create({
-        Uuid: uuid(),
-        HabilitadoCategoriaMaterialidad: 1,
-        EmpresaId: empresa.dataValues.id,
-        CategoriaMaterialidadId: catmat,
-      });
-    }
+    // }
+    // for (const catmat of CategoriaMaterialidadId) {
+    //   EmpresaCategoria.create({
+    //     Uuid: uuid(),
+    //     HabilitadoCategoriaMaterialidad: 1,
+    //     EmpresaId: empresa.dataValues.id,
+    //     CategoriaMaterialidadId: catmat,
+    //   });
+    //   EmpresaCategoriaCliente.create({
+    //     Uuid: uuid(),
+    //     HabilitadoCategoriaMaterialidad: 1,
+    //     EmpresaId: empresa.dataValues.id,
+    //     CategoriaMaterialidadId: catmat,
+    //   });
+    // }
   });
 
   res.json("Empresa creada correctamente");

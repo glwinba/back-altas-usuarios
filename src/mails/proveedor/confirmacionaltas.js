@@ -1,6 +1,7 @@
 import transporter from "../config.js";
 import fs from "fs";
 import handlebars from "handlebars";
+import config from "../../config.js";
 
 const sendMailProveedorConfirmacion = ({
     correo,
@@ -23,7 +24,7 @@ const sendMailProveedorConfirmacion = ({
     const htmlToSend = template(replacements);
 
     let mailOptions = {
-      from: "crodriguez@glwinba.com",
+      from: config.MAIL_USER,
       to: correo_contratante,
       subject: `${abreviacion} / CONFIRMACIÓN ALTA PROVEEDOR`,
       html: htmlToSend,

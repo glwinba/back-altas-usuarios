@@ -16,10 +16,26 @@ import Accesos from "../database/models/Accesos.model.js";
 import prefixempresas from "../arreglos/prefixempresas.js";
 import sendMailProveedor from "../mails/proveedor/controldeempresa.js";
 import sendMailProveedorConfirmacion from "../mails/proveedor/confirmacionaltas.js";
+import { changePassword } from "../helpers/passwords.js";
+import { getAbbreviationByPrefix } from "../helpers/prefix.js";
 
 // Hash password
 const encryPassword = (password, rounds = 8) => {
   return bcrypt.hashSync(password, rounds);
+};
+
+const generatePassword = () => {
+  caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+  let pass = "";
+  let longitud = 10;
+
+  for (i = 0; i < longitud; i++) {
+    pass += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+  }
+
+  let concatenar = pass.replace(pass[Math.round(Math.random() * 9)], "@");
+  return concatenar;
 };
 
 /* EndPoint para crear usuario Proveedor */
@@ -102,11 +118,11 @@ export const createUserProveedor = async (req, res) => {
                           ];
                           const REGISTRO_CONTROL = [
                             1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 80, 81,
-                            82
+                            82,
                           ];
                           const REGISTRO_CONTROL2 = [
                             1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 80, 81,
-                            82, 90
+                            82, 90,
                           ];
                           const ENTREGABLES = [23, 24, 25, 26];
                           if (
@@ -142,7 +158,8 @@ export const createUserProveedor = async (req, res) => {
                                 }).then((catopDoc) => {});
                               }
                             } else if (
-                              opper.dataValues.Ano === 2022 && opper.dataValues.Mes === 12
+                              opper.dataValues.Ano === 2022 &&
+                              opper.dataValues.Mes === 12
                             ) {
                               for (
                                 let i = 0;
@@ -343,21 +360,23 @@ export const getUser = async (req, res) => {
   });
 };
 
-export const changePassword = async (req, res) => {
-  const password_hash = encryPassword(req.body.password);
-  User.update(
-    {
-      PASS: password_hash,
-    },
-    {
-      where: {
-        UUID: req.params.id,
-      },
-    }
-  ).then((user) => {
-    res.json("Clave cambiada correctamente");
+export const updatePassword = async (req, res) => {
+  const user = await User.findByPk(req.params.id);
+
+  const changePass = await changePassword(req.params.id);
+  const abbreviation = await getAbbreviationByPrefix(user.NOMBREUSUARIO);
+
+  await sendMailProveedor({
+    razon_social: user.NOMBRE,
+    correo: user.EMAIL,
+    usuario: user.NOMBREUSUARIO,
+    clave: changePass.password,
+    abreviacion: abbreviation,
   });
-};
+
+  res.json("Usuario actualizado correctamente.")
+
+}
 
 export const updateRFCInternal = async (req, res) => {
   var operador = await Operador.findByPk(req.params.id, {
@@ -399,7 +418,14 @@ export const updateRFCInternal = async (req, res) => {
 };
 
 export const updateEmail = async (req, res) => {
-  User.update(
+  const user = await User.findByPk(req.params.id);
+
+  if (!user) return res.json("Usuario no encontrado") 
+
+  const changePass = await changePassword(req.params.id);
+  const abbreviation = await getAbbreviationByPrefix(user.NOMBREUSUARIO);
+
+  await User.update(
     {
       EMAIL: req.body.EMAIL,
     },
@@ -408,7 +434,15 @@ export const updateEmail = async (req, res) => {
         UUID: req.params.id,
       },
     }
-  ).then((user) => {
-    res.json("Correo electronico actualizado.");
+  );
+
+  await sendMailProveedor({
+    razon_social: user.NOMBRE,
+    correo: req.body.EMAIL,
+    usuario: user.NOMBREUSUARIO,
+    clave: changePass.password,
+    abreviacion: abbreviation,
   });
+
+  res.json("Usuario actualizado correctamente.")
 };

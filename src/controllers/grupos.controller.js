@@ -18,6 +18,6 @@ export const createGrupos = async (req, res) => {
     codigo: req.body.nombre,
     habilitado: 1,
     activo: 1,
-    comentarios: req.body.comentarios,
+    comentarios: req.body.comentarios ? req.body.comentarios : null,
   }).then((grupo) => res.json("Grupo creado correctamente."));
 };

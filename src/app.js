@@ -12,7 +12,7 @@ import { createUserInitial } from './libs/initialSetup.js';
 
 
 const app = express();
-createUserInitial()
+// createUserInitial() // Crear usuarios login automaticamente
 
 // Settings
 app.set('PORT', config.PORT);
