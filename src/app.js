@@ -4,6 +4,7 @@ import routeruser from './routes/user.routes.js';
 import routerempresa from './routes/empresa.routes.js';
 import routergrupos from './routes/grupos.routes.js';
 import routerauth from './routes/auth.routes.js';
+import routerlist69sat from './routes/ListasNegras/list69sat.routes.js';
 import routerempresacategoria from './routes/empresacategoria.routes.js';
 import './database/relationships.js';
 import cors from 'cors';
@@ -36,5 +37,9 @@ app.use(routerempresa);
 app.use(routergrupos);
 app.use(routerempresacategoria);
 app.use(routerauth);
+app.use("/api", routerlist69sat);
+
+
+
 
 export default app

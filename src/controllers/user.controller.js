@@ -80,6 +80,7 @@ export const createUserProveedor = async (req, res) => {
         Rfc: req.body.RFC,
         EmpresaId: req.body.EmpresaId,
         CatalogoOperadorId: 1,
+        AreaServicio: req.body.AreaServicio
       })
         .then((operador) => {
           const addPeriodo = (año, mes) => {

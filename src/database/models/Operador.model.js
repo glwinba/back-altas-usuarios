@@ -16,6 +16,9 @@ const Operador = sequelize.define("Operador", {
     },
     CatalogoOperadorId: {
         type: DataTypes.INTEGER
+    }, 
+    AreaServicio: {
+        type: DataTypes.STRING
     }
 });
 
