@@ -1,8 +1,8 @@
 import { uuid } from "uuidv4";
-import EmpresaCategoria from "../database/models/EmpresaCategoria.model";
+import EmpresaCategoriaCliente from "../../../database/models/EmpresaCategoriaCliente.model";
 
 export const createEmpresaCategoria = ({}) => {
-  EmpresaCategoria.create({
+  EmpresaCategoriaCliente.create({
     Uuid: uuid(),
     HabilitadoCategoriaMaterialidad: 1,
     EmpresaId: req.body.EmpresaId,
@@ -13,7 +13,7 @@ export const createEmpresaCategoria = ({}) => {
 };
 
 export const FindCategoryCompanyById = async (EmpresaId) => {
-  const categorycompanies = await EmpresaCategoria.findAll({
+  const categorycompanies = await EmpresaCategoriaCliente.findAll({
     where: {
       EmpresaId: EmpresaId
     },

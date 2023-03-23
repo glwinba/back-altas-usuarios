@@ -43,6 +43,16 @@ const prefijoEmpresa = [
         UUID: 868,
         prefix: "FAR",
         abbreviation: "FARMACON"
+    }, 
+    {
+        UUID: 907,
+        prefix: "I78",
+        abbreviation: "INMOBILIARIA 78"
+    },
+    {
+        UUID: 115,
+        prefix: "BSMX",
+        abbreviation: "BRIDGESTONE"
     }
 ]
 
