@@ -1,11 +1,11 @@
-import UsuarioOperador from "../../database/models/UsuarioOperador.model";
+import UsuarioOperadorClientes from "../../../database/models/UsuarioOperadorClientes.model";
 
 export const OperatorUserCreate = async (
   EmpresaId,
   ModuloTipoUsuarioId,
   Rfc
 ) => {
-  const operatoruser = await UsuarioOperador.create({
+  const operatoruser = await UsuarioOperadorClientes.create({
     EmpresaId: EmpresaId,
     Rfc: Rfc,
     ModuloTipoUsuarioId: ModuloTipoUsuarioId,

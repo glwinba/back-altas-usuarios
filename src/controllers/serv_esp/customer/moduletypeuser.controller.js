@@ -1,7 +1,7 @@
-import ModuloTipoUsuario from "../../database/models/ModuloTipoUsuario.model";
+import ModuloTipoUsuarioClientes from "../../../database/models/ModuloTipoUsuarioClientes.model";
 
 export const ModuleTypeUserCreate = async (EmpresaUsuarioModuloId) => {
-  const moduletypeuser = await ModuloTipoUsuario.create({
+  const moduletypeuser = await ModuloTipoUsuarioClientes.create({
     EmpresaUsuarioModuloId: EmpresaUsuarioModuloId,
     CatalogoTipoUsuarioId: 2,
   });

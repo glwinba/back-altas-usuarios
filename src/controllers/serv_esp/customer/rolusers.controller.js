@@ -1,7 +1,7 @@
-import UsuariosRoles from "../../database/models/UsuariosRoles.model";
+import UsuariosRolesClientes from "../../../database/models/UsuariosRolesClientes.model";
 
 export const RolUsersCreate = async (nameUser) => {
-  const rolusers = await UsuariosRoles.create({
+  const rolusers = await UsuariosRolesClientes.create({
     Activo: 1,
     Especial: "none",
     UsuarioNombreUsuario: nameUser,

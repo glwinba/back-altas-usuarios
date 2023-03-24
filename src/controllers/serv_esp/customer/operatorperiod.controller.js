@@ -1,6 +1,6 @@
 import { uuid } from "uuidv4";
 import OperadorPeriodoCliente from "../../../database/models/OperadorPeriodoCliente.model.js";
-import { periods } from "../../datas/createusers.js";
+import { periods } from "../../../datas/createusers.js";
 
 export const OperatorPeriodCreate = async (Mes, Ano, OperadorId) => {
   const operatorperiod = await OperadorPeriodoCliente.create({
