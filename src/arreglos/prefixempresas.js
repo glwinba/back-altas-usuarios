@@ -11,7 +11,7 @@ const prefijoEmpresa = [
     },
     {
         UUID: 869,
-        prefix: "IMMEX",
+        prefix: "IMX",
         abbreviation: "IMMEX"
     },
     {
