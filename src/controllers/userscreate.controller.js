@@ -141,13 +141,13 @@ export const CreateUserProveedorIndividual = async (
       nameUser,
       5
     );
-    const moduletypeuser = await ModuleTypeUserCreate(usercompanymodule.id);
+    const moduletypeuser = await ModuleTypeUserCreate(usercompanymodule.id, 2);
     const operatoruser = await OperatorUserCreate(
       EmpresaId,
       moduletypeuser.id,
       RFC
     );
-    const rolusers = await RolUsersCreate(nameUser);
+    const rolusers = await RolUsersCreate(nameUser, "none", 2);
     const permissionUsers = await UserAccessCreateComplete(rolusers.id);
 
     // Envio de Correo a proveedor.

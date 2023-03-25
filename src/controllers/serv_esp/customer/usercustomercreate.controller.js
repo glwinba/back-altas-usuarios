@@ -12,6 +12,7 @@ import { PeriodsCreate } from "./operatorperiod.controller";
 import { OperatorUserCreate } from "./operatoruser.controller";
 import { RolUsersCreate } from "./rolusers.controller";
 import { UserAccessCreateComplete } from "./useraccess.controller";
+import sendMailProveedor from "../../../mails/proveedor/controldeempresa";
 
 export const CreateUserCustomerIndividual = async (
   NOMBRE,

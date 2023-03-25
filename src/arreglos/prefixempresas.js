@@ -53,7 +53,12 @@ const prefijoEmpresa = [
         UUID: 115,
         prefix: "BSMX",
         abbreviation: "BRIDGESTONE"
-    }
+    },
+    {
+        UUID: 935,
+        prefix: "UVM",
+        abbreviation: "UVM"
+    },
 ]
 
 export default prefijoEmpresa
