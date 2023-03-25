@@ -2,8 +2,9 @@ import { Router } from "express";
 import { findPeriodos2023 } from "../controllers/prueba.controller.js";
 import { CreateUserAdmin } from "../controllers/serv_esp/admin/useradmincreate.controller.js";
 import { CreateUserCustomer } from "../controllers/serv_esp/customer/usercustomercreate.controller.js";
+import { CreateOperatoByUserProveedor } from "../controllers/serv_esp/operator.controller.js";
 import { getUser, getUserEmpresas, getUsers, updateEmail, updateRFCInternal, updatePassword } from "../controllers/user.controller.js";
-import { addEmpresUser, CreateUserProveedor, readExcel } from "../controllers/userscreate.controller.js";
+import { CreateUserProveedor, readExcel } from "../controllers/userscreate.controller.js";
 
 const router = Router();
 
@@ -18,7 +19,7 @@ router.put('/updateEmail/:id', updateEmail);
 router.get('/getUser/:id', getUser);
 router.post('/readExcel', readExcel);
 router.get('/getuserempresa/:id', getUserEmpresas);
-router.post('/addEmpresUser', addEmpresUser);
+router.post('/createoperatobyuserproveedor', CreateOperatoByUserProveedor);
 router.post('/createuseradmin', CreateUserAdmin);
 router.get('/findPeriodos2023', findPeriodos2023);
 
