@@ -1,3 +1,6 @@
+import mimeTypes from "mime-types";
+import fs from "fs";
+
 export const uploadFile = async (myFile) => {
   const fileData = myFile;
 

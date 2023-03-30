@@ -1,7 +1,4 @@
-import reader from "xlsx";
 import sendMailProveedor from "../mails/proveedor/controldeempresa.js";
-import mimeTypes from "mime-types";
-import fs from "fs";
 import { UserCreate } from "./user.controller.js";
 import { findExtraData } from "../helpers/prefix.js";
 import { generatePassword, hashPassword } from "../helpers/passwords.js";
@@ -18,63 +15,6 @@ import { RolUsersCreate } from "./serv_esp/rolusers.controller.js";
 import { UserAccessCreateComplete } from "./serv_esp/useraccess.controller.js";
 import Empresa from "../database/models/Empresa.model.js";
 import sendMailProveedorConfirmacion from "../mails/proveedor/confirmacionaltas.js";
-
-const uploadFile = async (myFile) => {
-  const fileData = myFile;
-
-  const path =
-    __dirname +
-    "/files/" +
-    Date.now() +
-    "." +
-    mimeTypes.extension(fileData.mimetype);
-
-  await fileData.mv(path, (err) => {
-    if (err) {
-      console.log(err);
-    }
-    console.log("Archivo subido correctamente");
-  });
-
-  return path;
-};
-
-const deleteFileLaterUpload = (filePath) => {
-  fs.access(filePath, (error) => {
-    if (!error) {
-      fs.unlinkSync(filePath);
-      console.log("Archivo eliminado");
-    } else {
-      console.error("Error al eliminar archivo: ", error);
-    }
-  });
-};
-
-export const readExcel = async (req, res) => {
-  let path = await uploadFile(req.files.file);
-
-  setTimeout(async () => {
-    const file = reader.readFile(path);
-
-    let data = [];
-    const sheets = file.SheetNames;
-
-    for (let i = 0; i < sheets.length; i++) {
-      if (sheets[i] === "PROVEEDOR") {
-        const temp = reader.utils.sheet_to_json(
-          file.Sheets[file.SheetNames[i]]
-        );
-
-        temp.forEach((respuesta) => {
-          data.push(respuesta);
-        });
-      }
-    }
-
-    res.json(data);
-    deleteFileLaterUpload(path);
-  }, 5000);
-};
 
 // Insert Proveedor ----------------------------------------
 

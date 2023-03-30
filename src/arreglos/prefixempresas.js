@@ -59,6 +59,11 @@ const prefijoEmpresa = [
         prefix: "UVM",
         abbreviation: "UVM"
     },
+    {
+        UUID: 888,
+        prefix: "CSCP",
+        abbreviation: "CSCP"
+    },
 ]
 
 export default prefijoEmpresa

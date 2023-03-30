@@ -1,7 +1,7 @@
 import { deleteFileLaterUpload, uploadFile } from "./files";
 import reader from "xlsx";
 
-export const readExcel = async (req, res) => {
+export const extractDataExcel = async (req, res) => {
   let path = await uploadFile(req.files.file);
 
   setTimeout(async () => {
