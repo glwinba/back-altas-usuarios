@@ -8,7 +8,8 @@ const sendMailProveedor = ({
     correo, 
     usuario,
     clave,
-    abreviacion
+    abreviacion,
+    mailcc
 }) =>
     new Promise((resolve, reject) => {
         const htmlFile = `${__dirname}/layout_email.html`;
@@ -27,8 +28,8 @@ const sendMailProveedor = ({
             from: config.MAIL_USER,
             to: correo,
             subject: `${abreviacion} / CONTROL DE EMPRESAS DE SERVICIOS ESPECIALIZADOS`,
-            html: htmlToSend
-
+            html: htmlToSend,
+            cc: mailcc
         };
 
         transporter.sendMail(mailOptions, (error, info) => {

@@ -26,7 +26,8 @@ export const CreateUserProveedorIndividual = async (
   correocontratante1,
   correocontratante2,
   AreaServicio,
-  sendMail
+  sendMail,
+  mailcc
 ) => {
   try {
     // Password hasheada
@@ -79,6 +80,7 @@ export const CreateUserProveedorIndividual = async (
         usuario: nameUser,
         clave: PASS,
         abreviacion: abbreviation,
+        mailcc: mailcc
       });
 
       const CompanyName = await Empresa.findByPk(EmpresaId);
@@ -88,7 +90,7 @@ export const CreateUserProveedorIndividual = async (
           nombre: NOMBRE,
           razon_social_contratante: CompanyName.nombre,
           correo_contratante: correocontratante1,
-          abreviacion: abbreviation,
+          abreviacion: abbreviation
         });
       }
       if (correocontratante2) {
@@ -146,7 +148,8 @@ export const CreateUserProveedor = async (req, res) => {
         req.body.correocontratante1,
         req.body.correocontratante2,
         req.body.AreaServicio,
-        req.body.sendMail
+        req.body.sendMail,
+        req.body.mailcc
       );
     }
 
