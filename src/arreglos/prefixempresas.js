@@ -64,6 +64,16 @@ const prefijoEmpresa = [
         prefix: "CSCP",
         abbreviation: "CSCP"
     },
+    {
+        UUID: 815,
+        prefix: "IVX",
+        abbreviation: "INVEX"
+    },
+    {
+        UUID: 918,
+        prefix: "CSC",
+        abbreviation: "CSC"
+    },
 ]
 
 export default prefijoEmpresa
