@@ -3,6 +3,7 @@ import { uuid } from "uuidv4";
 import EmpresaCategoria from "../database/models/EmpresaCategoria.model";
 import Grupo from "../database/models/Grupo.model";
 import EmpresaCategoriaCliente from "../database/models/EmpresaCategoriaCliente.model";
+import CategoriaMaterialidad from "../database/models/CategoriaMaterialidad";
 
 export const allEmpresaSelect = async (req, res) => {
   Empresa.findAll({
@@ -53,9 +54,27 @@ export const createCompanyBaja = async (req, res) => {
     .catch((error) => res.json("Error al agregar empresa."));
 };
 
+export const getCategoryMateriality = async (req, res) => {
+  const data = await CategoriaMaterialidad.findAll();
+  res.json(data);
+};
+
+export const listTypeCompanies = async (req, res) => {
+  const companieTypes = [
+    {
+      id: 1,
+      type: "Proveedor",
+    },
+    {
+      id: 2,
+      type: "Cliente",
+    },
+  ];
+  res.json(companieTypes)
+}
+
 export const createCompanyComplete = async (req, res) => {
-  const CategoriaMaterialidadId = [1, 2, 3];
-  Empresa.create({
+  const empresa = await Empresa.create({
     uuid: uuid(),
     rfc: req.body.rfc,
     nombre: req.body.nombre,
@@ -64,8 +83,9 @@ export const createCompanyComplete = async (req, res) => {
     activo: 1,
     GrupoId: req.body.GrupoId,
     comentarios: req.body.comentarios ? req.body.comentarios : null,
-  }).then((empresa) => {
-    Empresa.create({
+  });
+  if (req.body.bajaCheck) {
+    await Empresa.create({
       uuid: uuid(),
       rfc: req.body.rfc,
       nombre: `${req.body.nombre} BAJA`,
@@ -74,25 +94,29 @@ export const createCompanyComplete = async (req, res) => {
       activo: 1,
       GrupoId: req.body.GrupoId,
       comentarios: "Empresa para Baja",
-    }).then();
-    // if (req.body.CategoriaMaterialidadId){
+    });
+  }
 
-    // }
-    // for (const catmat of CategoriaMaterialidadId) {
-    //   EmpresaCategoria.create({
-    //     Uuid: uuid(),
-    //     HabilitadoCategoriaMaterialidad: 1,
-    //     EmpresaId: empresa.dataValues.id,
-    //     CategoriaMaterialidadId: catmat,
-    //   });
-    //   EmpresaCategoriaCliente.create({
-    //     Uuid: uuid(),
-    //     HabilitadoCategoriaMaterialidad: 1,
-    //     EmpresaId: empresa.dataValues.id,
-    //     CategoriaMaterialidadId: catmat,
-    //   });
-    // }
-  });
-
+  for (const catmat of req.body.categoryMaterialitySelect) {
+    for (const companieType of req.body.companieTypesSelect) {
+      if (companieType.type === "Proveedor") {
+        await EmpresaCategoria.create({
+          Uuid: uuid(),
+          HabilitadoCategoriaMaterialidad: 1,
+          EmpresaId: empresa.dataValues.id,
+          CategoriaMaterialidadId: catmat.Id,
+        });
+        console.log("Se creo la empresa categoria proveedor correctamente")
+      } else if (companieType.type === "Cliente") {
+        await EmpresaCategoriaCliente.create({
+          Uuid: uuid(),
+          HabilitadoCategoriaMaterialidad: 1,
+          EmpresaId: empresa.dataValues.id,
+          CategoriaMaterialidadId: catmat.Id,
+        });
+        console.log("Se creo la empresa categoria cliente correctamente")
+      }
+    }
+  }
   res.json("Empresa creada correctamente");
 };
