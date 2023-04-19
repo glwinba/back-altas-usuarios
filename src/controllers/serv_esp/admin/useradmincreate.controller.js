@@ -7,12 +7,14 @@ import { UserCompanyModuleCreate } from "../usercompanymodule.controller";
 import { OperatorUserCreate } from "../operatoruser.controller";
 import { RolUsersCreate } from "../rolusers.controller";
 import sendMailAdministradorConfirmacion from "../../../mails/admin/confirmacionaltas";
+import { UserAccessCreate, UserAccessCreateComplete } from "../useraccess.controller";
 
 export const CreateUserAdminIndividual = async (
   NOMBRE,
   EMAIL,
   EmpresaId,
-  sendMail
+  sendMail,
+  permissions
 ) => {
   try {
     // Password hasheada
@@ -42,7 +44,16 @@ export const CreateUserAdminIndividual = async (
       moduletypeuser.id,
       null
     );
-    const rolusers = await RolUsersCreate(nameUser, "all-access", null);
+
+    if (permissions.length > 0) {
+      const rolusers = await RolUsersCreate(nameUser, "none", null);
+      for (const permission of permissions) {
+        const permissionUsers = await UserAccessCreate(rolusers.id, permission.id);
+      }
+    } else {
+      const rolusers = await RolUsersCreate(nameUser, "all-access", null);
+    }
+
 
     // Envio de Correo a proveedor.
     if (sendMail) {
@@ -55,7 +66,15 @@ export const CreateUserAdminIndividual = async (
       });
     }
 
-    return console.log("Se creo el usuario correctamente");
+    console.log("Se creo el usuario correctamente");
+    // console.log({
+    //   nombre: nameUser,
+    //   pass: PASS
+    // })
+    return {
+      nombre: nameUser,
+      pass: PASS
+    }
   } catch (error) {
     return console.log(error);
   }
@@ -64,18 +83,23 @@ export const CreateUserAdminIndividual = async (
 export const CreateUserAdminMasive = async (
   EmpresaId,
   DataExcel,
-  sendMail
+  sendMail,
+  permissions
 ) => {
+  let array_users = [];
   try {
     // Creando el usuario de manera masiva.
     for (const data of DataExcel) {
-      await CreateUserAdminIndividual(
+      const user = await CreateUserAdminIndividual(
         data.NOMBREADMIN,
         data.MAILADMIN,
         EmpresaId,
-        sendMail
+        sendMail,
+        permissions
       );
+      array_users.push(user)
     }
+    console.log(array_users)
     return console.log("Se crearon de manera multiple los usuarios.");
   } catch (error) {
     return console.log(error);
@@ -88,14 +112,16 @@ export const CreateUserAdmin = async (req, res) => {
       await CreateUserAdminMasive(
         req.body.EmpresaId,
         req.body.dataExcel,
-        req.body.sendMail
+        req.body.sendMail,
+        req.body.permissions
       );
     } else {
       await CreateUserAdminIndividual(
         req.body.NOMBRE,
         req.body.EMAIL,
         req.body.EmpresaId,
-        req.body.sendMail
+        req.body.sendMail,
+        req.body.permissions
       );
     }
 

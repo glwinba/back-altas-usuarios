@@ -74,6 +74,11 @@ const prefijoEmpresa = [
         prefix: "CSC",
         abbreviation: "CSC"
     },
+    {
+        UUID: 950,
+        prefix: "UTM",
+        abbreviation: "UNITEC"
+    }
 ]
 
 export default prefijoEmpresa

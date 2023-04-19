@@ -3,6 +3,7 @@ import { findPeriodos2023 } from "../controllers/prueba.controller.js";
 import { CreateUserAdmin } from "../controllers/serv_esp/admin/useradmincreate.controller.js";
 import { CreateUserCustomer } from "../controllers/serv_esp/customer/usercustomercreate.controller.js";
 import { CreateOperatoByUserProveedor } from "../controllers/serv_esp/operator.controller.js";
+import { getPermission } from "../controllers/serv_esp/useraccess.controller.js";
 import { getUser, getUserEmpresas, getUsers, updateEmail, updateRFCInternal, updatePassword } from "../controllers/user.controller.js";
 import { CreateUserProveedor } from "../controllers/userscreate.controller.js";
 import { extractDataExcel } from "../helpers/excel.js";
@@ -25,6 +26,8 @@ router.put('/updateEmail/:id', updateEmail);
 router.get('/getUser/:id', getUser);
 router.get('/getuserempresa/:id', getUserEmpresas);
 router.get('/findPeriodos2023', findPeriodos2023);
+router.get('/getpermission', getPermission);
+
 
 
 
