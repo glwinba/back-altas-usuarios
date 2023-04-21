@@ -22,6 +22,7 @@ export const hashPassword = (password) => {
 
 export const changePassword = async (id) => {
   const password = await generatePassword();
+  console.log(password)
   const password_hash = await hashPassword(password);
 
   await User.update(

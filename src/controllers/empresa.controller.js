@@ -44,18 +44,19 @@ export const createCompany = async ({}) => {
 };
 
 export const createCompanyBaja = async (req, res) => {
-  Empresa.create({
+  const companie = await Empresa.findByPk(req.body.companieSelect);
+  const empresa = await Empresa.create({
     uuid: uuid(),
-    rfc: req.body.rfc,
-    nombre: `${req.body.nombre} BAJA`,
-    ciec: req.body.ciec,
+    rfc: companie.rfc,
+    nombre: `${companie.nombre} BAJA`,
+    ciec: null,
     habilitado: 1,
     activo: 1,
-    GrupoId: req.body.GrupoId,
+    GrupoId: companie.GrupoId,
     comentarios: "Empresa para Baja",
   })
-    .then((empresa) => res.json("Empresa creada correctamente."))
-    .catch((error) => res.json("Error al agregar empresa."));
+
+  res.json(empresa)
 };
 
 export const getCategoryMateriality = async (req, res) => {
@@ -356,3 +357,4 @@ export const createCompanyCompleteMasive = async (req, res) => {
   }
   res.json("Empresa creada correctamente");
 };
+
