@@ -7,7 +7,11 @@ import { UserCompanyModuleCreate } from "../usercompanymodule.controller";
 import { OperatorUserCreate } from "../operatoruser.controller";
 import { RolUsersCreate } from "../rolusers.controller";
 import sendMailAdministradorConfirmacion from "../../../mails/admin/confirmacionaltas";
-import { UserAccessCreate, UserAccessCreateComplete } from "../useraccess.controller";
+import {
+  UserAccessCreate,
+  UserAccessCreateComplete,
+} from "../useraccess.controller";
+import User from "../../../database/models/User.model";
 
 export const CreateUserAdminIndividual = async (
   NOMBRE,
@@ -48,12 +52,14 @@ export const CreateUserAdminIndividual = async (
     if (permissions.length > 0) {
       const rolusers = await RolUsersCreate(nameUser, "none", null);
       for (const permission of permissions) {
-        const permissionUsers = await UserAccessCreate(rolusers.id, permission.id);
+        const permissionUsers = await UserAccessCreate(
+          rolusers.id,
+          permission.id
+        );
       }
     } else {
       const rolusers = await RolUsersCreate(nameUser, "all-access", null);
     }
-
 
     // Envio de Correo a proveedor.
     if (sendMail) {
@@ -67,14 +73,14 @@ export const CreateUserAdminIndividual = async (
     }
 
     console.log("Se creo el usuario correctamente");
-    // console.log({
-    //   nombre: nameUser,
-    //   pass: PASS
-    // })
-    return {
+    console.log({
       nombre: nameUser,
       pass: PASS
-    }
+    })
+    return {
+      nombre: nameUser,
+      pass: PASS,
+    };
   } catch (error) {
     return console.log(error);
   }
@@ -97,9 +103,9 @@ export const CreateUserAdminMasive = async (
         sendMail,
         permissions
       );
-      array_users.push(user)
+      array_users.push(user);
     }
-    console.log(array_users)
+    console.log(array_users);
     return console.log("Se crearon de manera multiple los usuarios.");
   } catch (error) {
     return console.log(error);
@@ -130,4 +136,21 @@ export const CreateUserAdmin = async (req, res) => {
     console.log(error);
     res.json("error");
   }
+};
+
+export const CreateAdminAssociateCompanie = async (req, res) => {
+  const id = req.params.id;
+  const user = await User.findByPk(id);
+  const usercompanymodule = await UserCompanyModuleCreate(
+    req.body.EmpresaId,
+    user.NOMBREUSUARIO,
+    5
+  );
+  const moduletypeuser = await ModuleTypeUserCreate(usercompanymodule.id, 1);
+  const operatoruser = await OperatorUserCreate(
+    req.body.EmpresaId,
+    moduletypeuser.id,
+    null
+  );
+  res.json("Empresa agregada correctamente.")
 };

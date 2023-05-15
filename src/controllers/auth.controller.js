@@ -1,29 +1,56 @@
-import LoginUser from "../database/models/Login.model.js"
-import bcrypt from "bcrypt"
-import jwt from "jsonwebtoken"
-import config from "../config.js"
+import LoginUser from "../database/models/Login.model.js";
+import bcrypt from "bcrypt";
+import { createToken } from "../services/jwt.js";
 
-const comparePassword = async (password, receivedPassword) => {
-    return await bcrypt.compare(password, receivedPassword)
-}
+export const login = (req, res) => {
+  let params = req.body;
+  if (!params.NOMBREUSUARIO || !params.PASS) {
+    return res.status(400).send({
+      status: "error",
+      message: "Faltan datos por enviar.",
+    });
+  }
 
-export const signIn = async (req, res) => {
-    const userFound = await LoginUser.findOne({
-        where: {
-            NOMBREUSUARIO: req.body.NOMBREUSUARIO
-        }
+  LoginUser.findOne({
+    where: {
+      NOMBREUSUARIO: req.body.NOMBREUSUARIO,
+    },
+  })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({
+          status: "error",
+          message: "No existe el usuario.",
+        });
+      }
+
+      const pwd = bcrypt.compareSync(params.PASS, user.PASS);
+
+      if (!pwd) {
+        return res.status(400).send({
+          status: "error",
+          message: "No te has identificado correctamente.",
+        });
+      }
+
+      const token = createToken(user);
+      return res.status(200).send({
+        status: "succes",
+        message: "Te has identificado correctamente",
+        user: {
+          id: user.id,
+          user: user.NOMBREUSUARIO,
+          nombre: user.NOMBRE,
+          apellidos: user.APELLIDOS,
+        },
+        token,
+      });
     })
-
-    if(!userFound) return res.status(400).json({message: "El usuario no fue encontrado"})
-
-    const verifyPassword = await comparePassword(req.body.PASS, userFound.PASS)
-
-    if(!verifyPassword) return res.status(401).json({token: null, message: 'Invalid'})
-    
-    const token = jwt.sign({id: userFound.id}, config.SECRET, {
-        expiresIn: 86400, // 24hrs
-    })
-
-    res.json({token})
-
-}
+    .catch((error) => {
+      return res.status(400).send({
+        status: "error",
+        message: "No existe el usuario",
+        error: error,
+      });
+    });
+};

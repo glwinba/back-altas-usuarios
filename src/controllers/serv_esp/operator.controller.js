@@ -65,8 +65,7 @@ export const CreateOperatoByUserProveedor = async (req, res) => {
         moduletypeuser.id,
         RFC
       );
-      const rolusers = await RolUsersCreate(user.NOMBREUSUARIO, "none", 2);
-      const permissionUsers = await UserAccessCreateComplete(rolusers.id);
+    
       console.log("Se creo la empresa correctamente");
     }
 

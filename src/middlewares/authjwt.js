@@ -1,21 +1,36 @@
-import jwt from "jsonwebtoken";
-import config from "../config.js";
-import LoginUser from "../database/models/Login.model.js";
+import jwt from "jwt-simple";
+import moment from "moment";
+import { secret } from "../services/jwt";
 
-export const verifyToken = async (req, res, next) => {
-  try {
-    const token = req.headers["x-access-token"];
-    if (!token) return res.status(403).json({ message: "No token provided" });
-
-    const decoded = jwt.verify(token, config.SECRET);
-    req.userId = decoded.id;
-
-    const user = await LoginUser.findByPk(req.userId);
-    if (!user) return res.status(404).json({ message: "No user found" });
-
-    next();
-  } catch (error) {
-    console.log(error);
-    return res.status(401).json({ message: "Unauthorized" });
+export const auth = (req, res, next) => {
+  if(!req.headers.authorization){
+    return res.status(403).send({
+      status: "error",
+      message: "La petición no tiene la cabacera de autenticación"
+    })
   }
-};
+
+  let token = req.headers.authorization.replace(/['"]+/g, "")
+
+  try {
+    let payload = jwt.decode(token, secret);
+
+    if (payload.exp <= moment().unix()) {
+      return res.status(401).send({
+        status: "error",
+        message: "Token expirado"
+      }) 
+    }
+
+    req.user = payload
+    console.log(req.user)
+  } catch (error) {
+    return res.status(404).send({
+      status: "error",
+      message: "Token inválido"
+    })
+  }
+
+  next()
+}
+

@@ -59,6 +59,18 @@ export const createCompanyBaja = async (req, res) => {
   res.json(empresa)
 };
 
+export const createCategoriesCompanie = async (req, res) => {
+  const companie = await Empresa.findByPk(req.body.companieSelect);
+  const empresa = await EmpresaCategoria.create({
+    Uuid: uuid(),
+    HabilitadoCategoriaMaterialidad: 1,
+    EmpresaId: companie.id,
+    CategoriaMaterialidadId: companie
+  })
+
+  res.json(empresa)
+};
+
 export const getCategoryMateriality = async (req, res) => {
   const data = await CategoriaMaterialidad.findAll({
     attributes: ["id", "Nombre"],

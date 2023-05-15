@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { findPeriodos2023 } from "../controllers/prueba.controller.js";
-import { CreateUserAdmin } from "../controllers/serv_esp/admin/useradmincreate.controller.js";
+import { CreateAdminAssociateCompanie, CreateUserAdmin } from "../controllers/serv_esp/admin/useradmincreate.controller.js";
 import { CreateUserCustomer } from "../controllers/serv_esp/customer/usercustomercreate.controller.js";
 import { CreateOperatoByUserProveedor } from "../controllers/serv_esp/operator.controller.js";
 import { getPermission } from "../controllers/serv_esp/useraccess.controller.js";
@@ -20,6 +20,7 @@ router.post('/createuseradmin', CreateUserAdmin);
 router.post('/extractdataexcel', extractDataExcel);
 
 router.post('/createoperatobyuserproveedor', CreateOperatoByUserProveedor);
+router.post('/createadminassociatecompanie/:id', CreateAdminAssociateCompanie)
 
 router.get('/getUsers', getUsers);
 router.put('/updateEmail/:id', updateEmail);

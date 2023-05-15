@@ -3,31 +3,29 @@ import fs from "fs";
 import handlebars from "handlebars";
 import config from "../../config.js";
 
-const sendMailProveedor = ({
+const sendMailProveedorLaureate = ({
     razon_social,
     correo, 
     usuario,
     clave,
-    abreviacion,
     mailcc
 }) =>
     new Promise((resolve, reject) => {
-        const htmlFile = `${__dirname}/layout_email_new.html`;
+        const htmlFile = `${__dirname}/layout_laureate.html`;
         const htmlSync = fs.readFileSync(htmlFile, { encoding: "utf-8" });
         const template = handlebars.compile(htmlSync);
         const replacements = {
             razon_social,
             correo, 
             usuario,
-            clave,
-            abreviacion
+            clave
         };
         const htmlToSend = template(replacements);
 
         let mailOptions = {
             from: config.MAIL_USER,
             to: correo,
-            subject: `${abreviacion} / CONTROL DE EMPRESAS DE SERVICIOS ESPECIALIZADOS`,
+            subject: `LAUREATE / CONTROL DE EMPRESAS DE SERVICIOS ESPECIALIZADOS`,
             html: htmlToSend,
             cc: mailcc
         };
@@ -40,4 +38,4 @@ const sendMailProveedor = ({
     });
 
 
-export default sendMailProveedor
+export default sendMailProveedorLaureate

@@ -15,6 +15,7 @@ import { RolUsersCreate } from "./serv_esp/rolusers.controller.js";
 import { UserAccessCreateComplete } from "./serv_esp/useraccess.controller.js";
 import Empresa from "../database/models/Empresa.model.js";
 import sendMailProveedorConfirmacion from "../mails/proveedor/confirmacionaltas.js";
+import sendMailProveedorLaureate from "../mails/proveedor/maillaureate.js";
 
 // Insert Proveedor ----------------------------------------
 
@@ -74,14 +75,26 @@ export const CreateUserProveedorIndividual = async (
 
     // Envio de Correo a proveedor.
     if (sendMail) {
-      await sendMailProveedor({
-        razon_social: NOMBRE,
-        correo: EMAIL,
-        usuario: nameUser,
-        clave: PASS,
-        abreviacion: abbreviation,
-        mailcc: mailcc
-      });
+
+      if (EmpresaId === 935 || EmpresaId === 950) {
+        await sendMailProveedorLaureate({
+          razon_social: NOMBRE,
+          correo: EMAIL,
+          usuario: nameUser,
+          clave: PASS,
+          mailcc: mailcc
+        });
+      } else {
+        await sendMailProveedor({
+          razon_social: NOMBRE,
+          correo: EMAIL,
+          usuario: nameUser,
+          clave: PASS,
+          abreviacion: abbreviation,
+          mailcc: mailcc
+        });
+      }
+      
 
       const CompanyName = await Empresa.findByPk(EmpresaId);
       if (correocontratante1) {
@@ -104,7 +117,10 @@ export const CreateUserProveedorIndividual = async (
       }
     }
 
-    return console.log("Se creo el usuario correctamente");
+    return console.log({
+      nameUser: nameUser,
+      PASS: PASS
+    });
   } catch (error) {
     return console.log(error);
   }
