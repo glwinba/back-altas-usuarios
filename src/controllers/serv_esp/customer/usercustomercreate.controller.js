@@ -76,7 +76,10 @@ export const CreateUserCustomerIndividual = async (
       });
     }
 
-    return console.log("Se creo el usuario correctamente");
+    return console.log({
+      nameUser: nameUser,
+      PASS: PASS
+    });
   } catch (error) {
     return console.log(error);
   }

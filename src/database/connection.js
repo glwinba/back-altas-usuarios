@@ -3,93 +3,106 @@ import { Sequelize } from "sequelize";
 
 // Schema dbo
 const sequelize = new Sequelize(
-    config.DB_NAME_SCHEMA,
-    config.DB_NAME_USER,
-    config.DB_PASSWORD, 
-    {
-        host: config.DB_SERVER,
-        port: config.DB_PORT,
-        dialect: "mssql",
-        timezone: "America/Mexico_City",
-        define: {
-            schema: "dbo", // Esquema de la base de datos.
-            freezeTableName: true // Tablas en singular
-        },
-        logging: false
-    }
+  config.DB_NAME_SCHEMA,
+  config.DB_NAME_USER,
+  config.DB_PASSWORD,
+  {
+    host: config.DB_SERVER,
+    port: config.DB_PORT,
+    dialect: "mssql",
+    timezone: "America/Mexico_City",
+    define: {
+      schema: "dbo", // Esquema de la base de datos.
+      freezeTableName: true, // Tablas en singular
+    },
+    dialectOptions: {
+      options: { requestTimeout: 1200000 },
+    },
+    logging: false,
+  }
 );
 
-
 const sequelizeBMServEsp = new Sequelize(
-    config.DB_NAME_SCHEMA,
-    config.DB_NAME_USER,
-    config.DB_PASSWORD, 
-    {
-        host: config.DB_SERVER,
-        port: config.DB_PORT,
-        dialect: "mssql",
-        timezone: "America/Mexico_City",
-        define: {
-            schema: "BM_SERV_ESP", // Esquema de la base de datos.
-            freezeTableName: true // Tablas en singular
-        },
-        logging: false
-    }
+  config.DB_NAME_SCHEMA,
+  config.DB_NAME_USER,
+  config.DB_PASSWORD,
+  {
+    host: config.DB_SERVER,
+    port: config.DB_PORT,
+    dialect: "mssql",
+    timezone: "America/Mexico_City",
+    define: {
+      schema: "BM_SERV_ESP", // Esquema de la base de datos.
+      freezeTableName: true, // Tablas en singular
+    },
+    dialectOptions: {
+      options: { requestTimeout: 1200000 },
+    },
+    logging: false,
+  }
 );
 
 const sequelizeGeneral = new Sequelize(
-    config.DB_NAME_SCHEMA,
-    config.DB_NAME_USER,
-    config.DB_PASSWORD, 
-    {
-        host: config.DB_SERVER,
-        port: config.DB_PORT,
-        dialect: "mssql",
-        timezone: "America/Mexico_City",
-        define: {
-            schema: "GENERAL", // Esquema de la base de datos.
-            freezeTableName: true // Tablas en singular
-        },
-        logging: false
-    }
+  config.DB_NAME_SCHEMA,
+  config.DB_NAME_USER,
+  config.DB_PASSWORD,
+  {
+    host: config.DB_SERVER,
+    port: config.DB_PORT,
+    dialect: "mssql",
+    timezone: "America/Mexico_City",
+    define: {
+      schema: "GENERAL", // Esquema de la base de datos.
+      freezeTableName: true, // Tablas en singular
+    },
+    dialectOptions: {
+      options: { requestTimeout: 1200000 },
+    },
+    logging: false,
+  }
 );
 
 const sequelizeBMServEspClientes = new Sequelize(
-    config.DB_NAME_SCHEMA,
-    config.DB_NAME_USER,
-    config.DB_PASSWORD, 
-    {
-        host: config.DB_SERVER,
-        port: config.DB_PORT,
-        dialect: "mssql",
-        timezone: "America/Mexico_City",
-        define: {
-            schema: "BM_SERV_ESP_CLIENTES", // Esquema de la base de datos.
-            freezeTableName: true // Tablas en singular
-        },
-        logging: false
-    }
+  config.DB_NAME_SCHEMA,
+  config.DB_NAME_USER,
+  config.DB_PASSWORD,
+  {
+    host: config.DB_SERVER,
+    port: config.DB_PORT,
+    dialect: "mssql",
+    timezone: "America/Mexico_City",
+    define: {
+      schema: "BM_SERV_ESP_CLIENTES", // Esquema de la base de datos.
+      freezeTableName: true, // Tablas en singular
+    },
+    dialectOptions: {
+      options: { requestTimeout: 1200000 },
+    },
+    logging: false,
+  }
 );
 
 const sequelizeListasNegras = new Sequelize(
-    config.DB_NAME_SCHEMA_LISTASNEGRAS,
-    config.DB_NAME_USER,
-    config.DB_PASSWORD, 
-    {
-        host: config.DB_SERVER,
-        port: config.DB_PORT,
-        dialect: "mssql",
-        timezone: "America/Mexico_City",
-        define: {
-            schema: "dbo", // Esquema de la base de datos.
-            freezeTableName: true // Tablas en singular
-        },
-        logging: false
-    }
+  config.DB_NAME_SCHEMA_LISTASNEGRAS,
+  config.DB_NAME_USER,
+  config.DB_PASSWORD,
+  {
+    host: config.DB_SERVER,
+    port: config.DB_PORT,
+    dialect: "mssql",
+    timezone: "America/Mexico_City",
+    define: {
+      schema: "dbo", // Esquema de la base de datos.
+      freezeTableName: true, // Tablas en singular
+    },
+    logging: false,
+  }
 );
 
-
 module.exports = {
-    sequelize, sequelizeBMServEsp, sequelizeGeneral, sequelizeBMServEspClientes, sequelizeListasNegras
-}
-
+  sequelize,
+  sequelizeBMServEsp,
+  sequelizeGeneral,
+  sequelizeBMServEspClientes,
+  sequelizeListasNegras,
+};

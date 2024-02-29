@@ -9,6 +9,8 @@ import { OperatorUserCreate } from "./operatoruser.controller.js";
 import { RolUsersCreate } from "./rolusers.controller.js";
 import { UserAccessCreateComplete } from "./useraccess.controller.js";
 import { UserCompanyModuleCreate } from "./usercompanymodule.controller.js";
+import EmpresaUsuariosModulo from "../../database/models/EmpresaUsuarioModulo.model.js";
+import ModuloTipoUsuario from "../../database/models/ModuloTipoUsuario.model.js";
 
 export const OperatorCreate = async (
   RazonSocial,
@@ -31,7 +33,13 @@ export const OperatorCreate = async (
 export const CreateOperatoByUserProveedor = async (req, res) => {
   try {
     const user = req.body.usuario;
-    const RFC = user.NOMBREUSUARIO.split("-")[1];
+    let RFC;
+    if (user.NOMBREUSUARIO.split("-").length === 2) {
+      RFC = user.NOMBREUSUARIO.split("-")[1];
+    } else {
+      RFC = user.NOMBREUSUARIO;
+    }
+     
     for (const Empresa of req.body.EmpresaId) {
       const EmpresaId = parseInt(Empresa.id) 
       const operator = await OperatorCreate(
@@ -51,22 +59,24 @@ export const CreateOperatoByUserProveedor = async (req, res) => {
           operatorcategory,
           categorycompanies
         );
-      const usercompanymodule = await UserCompanyModuleCreate(
-        EmpresaId,
-        user.NOMBREUSUARIO,
-        5
-      );
-      const moduletypeuser = await ModuleTypeUserCreate(
-        usercompanymodule.id,
-        2
-      );
+      const usercompanymodule = await EmpresaUsuariosModulo.findOne({
+        where: {
+          UsuarioNombreUsuario: user.NOMBREUSUARIO,
+        },
+      });
+
+      const moduletypeuser = await ModuloTipoUsuario.findOne({
+        where: {
+          EmpresaUsuarioModuloId: usercompanymodule.id,
+        },
+      })
       const operatoruser = await OperatorUserCreate(
         EmpresaId,
         moduletypeuser.id,
         RFC
       );
     
-      console.log("Se creo la empresa correctamente");
+      console.log(`Se creo la empresa correctamente del rfc ${RFC}`);
     }
 
     res.json("Empresas Agregadas correectamente");

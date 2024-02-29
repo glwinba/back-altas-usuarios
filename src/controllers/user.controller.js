@@ -7,6 +7,7 @@ import Empresa from "../database/models/Empresa.model.js";
 import sendMailProveedor from "../mails/proveedor/controldeempresa.js";
 import { changePassword } from "../helpers/passwords.js";
 import { getAbbreviationByPrefix } from "../helpers/prefix.js";
+import sendMailProveedorLaureate from "../mails/proveedor/maillaureate.js";
 
 export const getUsers = async (req, res) => {
   const type_users = ["admin", "cliente", "proveedor"];
@@ -51,9 +52,8 @@ export const updatePassword = async (req, res) => {
     abreviacion: abbreviation,
   });
 
-  res.json("Usuario actualizado correctamente.")
-
-}
+  res.json("Usuario actualizado correctamente.");
+};
 
 export const updateRFCInternal = async (req, res) => {
   var operador = await Operador.findByPk(req.params.id, {
@@ -97,7 +97,7 @@ export const updateRFCInternal = async (req, res) => {
 export const updateEmail = async (req, res) => {
   const user = await User.findByPk(req.params.id);
 
-  if (!user) return res.json("Usuario no encontrado") 
+  if (!user) return res.json("Usuario no encontrado");
 
   const changePass = await changePassword(req.params.id);
   const abbreviation = await getAbbreviationByPrefix(user.NOMBREUSUARIO);
@@ -121,7 +121,7 @@ export const updateEmail = async (req, res) => {
     abreviacion: abbreviation,
   });
 
-  res.json("Usuario actualizado correctamente.")
+  res.json("Usuario actualizado correctamente.");
 };
 
 export const UserCreate = async (NOMBREUSUARIO, PASS, NOMBRE, EMAIL, ROL) => {
@@ -132,7 +132,32 @@ export const UserCreate = async (NOMBREUSUARIO, PASS, NOMBRE, EMAIL, ROL) => {
     NOMBRE: NOMBRE,
     EMAIL: EMAIL,
     HABILITADO: 1,
-  })
+  });
 
-  return user
-}
+  return user;
+};
+
+export const sendAccessMasive = async (req, res) => {
+  const users = await User.findAll({
+    where: {
+      IDROL: 2074,
+      NOMBREUSUARIO: {
+        [Op.like]: `%GS-%`,
+      }
+    }
+  })
+  for (const user of users) {
+    const changePass = await changePassword(user.UUID);
+    const abbreviation = await getAbbreviationByPrefix(user.NOMBREUSUARIO);
+
+    await sendMailProveedor({
+      razon_social: user.NOMBRE,
+      correo: user.EMAIL,
+      usuario: user.NOMBREUSUARIO,
+      clave: changePass.password,
+      abreviacion: abbreviation,
+    });
+    console.log(`Accesos enviados de: ${user.NOMBREUSUARIO}`)
+  }
+  res.json(`Todos los accesos fueron enviados correctamente. Total:${users.length}`);
+};

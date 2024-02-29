@@ -1,5 +1,9 @@
 import { BuildingNameAdmin } from "../../../helpers/namesusers";
-import { generatePassword, hashPassword } from "../../../helpers/passwords";
+import {
+  changePassword,
+  generatePassword,
+  hashPassword,
+} from "../../../helpers/passwords";
 import { findExtraData } from "../../../helpers/prefix";
 import { UserCreate } from "../../user.controller";
 import { ModuleTypeUserCreate } from "../moduletypeuser.controller";
@@ -12,6 +16,7 @@ import {
   UserAccessCreateComplete,
 } from "../useraccess.controller";
 import User from "../../../database/models/User.model";
+import sendMailAdministradorInternoConfirmacion from "../../../mails/admin_intern/confirmacion_altas_internas";
 
 export const CreateUserAdminIndividual = async (
   NOMBRE,
@@ -35,6 +40,7 @@ export const CreateUserAdminIndividual = async (
           "CCO-ROPC031223H45"
       */
     const nameUser = await BuildingNameAdmin(prefix, NOMBRE);
+
     // Creando el usuario.
     const user = await UserCreate(nameUser, password_hash, NOMBRE, EMAIL, 2073);
     const usercompanymodule = await UserCompanyModuleCreate(
@@ -75,8 +81,8 @@ export const CreateUserAdminIndividual = async (
     console.log("Se creo el usuario correctamente");
     console.log({
       nombre: nameUser,
-      pass: PASS
-    })
+      pass: PASS,
+    });
     return {
       nombre: nameUser,
       pass: PASS,
@@ -84,6 +90,37 @@ export const CreateUserAdminIndividual = async (
   } catch (error) {
     return console.log(error);
   }
+};
+
+export const updatePasswordAdmin = async (req, res) => {
+  const user = await User.findByPk(req.params.id);
+
+  const changePass = await changePassword(req.params.id);
+
+  await sendMailAdministradorConfirmacion({
+    correo: user.EMAIL,
+    nombre: user.NOMBRE,
+    nombreusuario: user.NOMBREUSUARIO,
+    password: changePass.password,
+    abreviacion: "DAIMLER",
+  });
+
+  res.json("Usuario Admin actualizado correctamente.");
+};
+
+export const updatePasswordAdminIntern = async (req, res) => {
+  const user = await User.findByPk(req.params.id);
+
+  const changePass = await changePassword(req.params.id);
+
+  await sendMailAdministradorInternoConfirmacion({
+    correo: user.EMAIL,
+    nombre: user.NOMBRE,
+    nombreusuario: user.NOMBREUSUARIO,
+    password: changePass.password
+  });
+
+  res.json("Usuario Admin actualizado correctamente.");
 };
 
 export const CreateUserAdminMasive = async (
@@ -152,5 +189,5 @@ export const CreateAdminAssociateCompanie = async (req, res) => {
     moduletypeuser.id,
     null
   );
-  res.json("Empresa agregada correctamente.")
+  res.json(`Empresa ${req.body.EmpresaId} agregada correctamente.`);
 };

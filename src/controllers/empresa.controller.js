@@ -8,6 +8,7 @@ import xl from "excel4node";
 import path from "path";
 import fs from "fs";
 import { categoryMaterialityIds } from "../datas/createcompany";
+import CategoriaMaterialidadCliente from "../database/models/CategoriaMaterialidadCliente";
 
 export const allEmpresaSelect = async (req, res) => {
   Empresa.findAll({
@@ -77,6 +78,13 @@ export const getCategoryMateriality = async (req, res) => {
   });
   res.json(data);
 };
+
+// export const getCategoryMaterialityClient = async (req, res) => {
+//   const data = await CategoriaMaterialidadCliente.findAll({
+//     attributes: ["id", "Nombre"],
+//   });
+//   res.json(data);
+// };
 
 export const listTypeCompanies = async (req, res) => {
   const companieTypes = [
@@ -225,7 +233,7 @@ export const createCompanyComplete = async (req, res) => {
               Uuid: uuid(),
               HabilitadoCategoriaMaterialidad: 1,
               EmpresaId: empresa.dataValues.id,
-              CategoriaMaterialidadId: catmat.id,
+              CategoriaMaterialidadId: catmat,
             });
           }
         }
